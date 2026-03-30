@@ -1,0 +1,36 @@
+# 系統檔案
+.DS_Store
+Thumbs.db
+
+# IDE / 編輯器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 環境變數
+.env
+.env.*
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js
+app/.next/
+app/out/
+app/build/
+app/dev_server.log
+
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
+
+# 雜項
+*.pem
+*.tsbuildinfo
+admin2023
+froalaeditor

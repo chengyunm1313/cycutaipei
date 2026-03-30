@@ -1,0 +1,17 @@
+name = "product-catalog"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+APP_URL = "https://product-catalog-a2z.pages.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "product-catalog-db"
+database_id = "4a75cb0c-ac40-4e72-b0dc-42ca915ce20d"
+migrations_dir = "../migrations"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "product-catalog-media"

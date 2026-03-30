@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `catalog_link` text;

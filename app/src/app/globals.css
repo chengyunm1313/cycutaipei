@@ -1,0 +1,110 @@
+@import 'tailwindcss';
+
+/* ===== 設計系統 Tokens ===== */
+@theme inline {
+	/* 主色系 */
+	--color-primary: #2563eb;
+	--color-primary-light: #3b82f6;
+	--color-primary-dark: #1d4ed8;
+	--color-secondary: #60a5fa;
+	--color-cta: #f97316;
+	--color-cta-hover: #ea580c;
+
+	/* 中性色 */
+	--color-surface: #f8fafc;
+	--color-surface-alt: #f1f5f9;
+	--color-card: #ffffff;
+	--color-text: #1e293b;
+	--color-text-muted: #64748b;
+	--color-text-light: #94a3b8;
+	--color-border: #e2e8f0;
+	--color-border-light: #f1f5f9;
+
+	/* 狀態色 */
+	--color-success: #22c55e;
+	--color-warning: #f59e0b;
+	--color-error: #ef4444;
+
+	/* 字體 */
+	--font-heading: 'Inter', 'Noto Sans TC', sans-serif;
+	--font-body: 'Inter', 'Noto Sans TC', sans-serif;
+
+	/* 動畫 */
+	--animate-fade-in: fade-in 0.5s ease-out;
+	--animate-slide-up: slide-up 0.5s ease-out;
+	--animate-scale-in: scale-in 0.3s ease-out;
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@keyframes slide-up {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	@keyframes scale-in {
+		from {
+			opacity: 0;
+			transform: scale(0.95);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+}
+
+/* ===== 全域基礎樣式 ===== */
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-surface);
+	color: var(--color-text);
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== 響應式減少動畫 ===== */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* ===== 選取樣式 ===== */
+::selection {
+	background-color: var(--color-primary);
+	color: white;
+}
+
+/* ===== 滾動條樣式 ===== */
+::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	background: var(--color-surface-alt);
+}
+::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-text-light);
+}
