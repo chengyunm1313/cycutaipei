@@ -25,10 +25,9 @@ function slugify(input: string): string {
 async function ensureDefaultArticleCategories(db: ReturnType<typeof getDb>) {
 	const existing = await db.select().from(articleCategories).all();
 	const defaults = [
-		{ name: '技術分享', slug: 'tech-sharing', sortOrder: 40, isActive: true },
-		{ name: '產業動態', slug: 'industry-trends', sortOrder: 30, isActive: true },
-		{ name: '產品應用', slug: 'product-applications', sortOrder: 20, isActive: true },
-		{ name: '公司新聞', slug: 'company-news', sortOrder: 10, isActive: true },
+		{ name: '會務公告', slug: 'association-announcement', sortOrder: 20, isActive: true },
+		{ name: '活動報導', slug: 'event-report', sortOrder: 10, isActive: true },
+		{ name: '最新消息', slug: 'latest-news', sortOrder: 0, isActive: true },
 	];
 
 	// 舊版誤植預設值（分類一/分類二）若存在，先清除再補上正式分類
