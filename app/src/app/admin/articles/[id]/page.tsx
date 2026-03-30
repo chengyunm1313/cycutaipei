@@ -44,6 +44,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 	const [coverImage, setCoverImage] = useState('');
 	const [seoTitle, setSeoTitle] = useState('');
 	const [seoDescription, setSeoDescription] = useState('');
+	const [postDate, setPostDate] = useState('');
 	const [editorContent, setEditorContent] = useState('');
 	const [initialEditorHtml, setInitialEditorHtml] = useState('');
 	const [author, setAuthor] = useState('');
@@ -72,6 +73,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 				setCoverImage(article.coverImage || '');
 				setSeoTitle(article.seoTitle || '');
 				setSeoDescription(article.seoDescription || '');
+				setPostDate(article.postDate || '');
 				setEditorContent(article.content || '');
 				setInitialEditorHtml(article.content || '');
 				setAuthor(article.author || '');
@@ -102,6 +104,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 					coverImage,
 					seoTitle,
 					seoDescription,
+					postDate,
 					editorContent,
 				})
 			);
@@ -115,6 +118,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 		coverImage,
 		seoTitle,
 		seoDescription,
+		postDate,
 		editorContent,
 	]);
 
@@ -143,6 +147,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 				author,
 				seoTitle,
 				seoDescription,
+				postDate: postDate || null,
 				status,
 			});
 			// 清除自動儲存
@@ -289,6 +294,16 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 								</option>
 							))}
 						</select>
+					</div>
+
+					<div className='bg-card rounded-xl border border-border p-4'>
+						<label className='block text-sm font-medium text-text mb-2'>原始發文日期</label>
+						<input
+							type='date'
+							value={postDate}
+							onChange={(e) => setPostDate(e.target.value)}
+							className='w-full px-3 py-2 text-sm bg-surface rounded-lg border border-border outline-none focus:border-primary'
+						/>
 					</div>
 
 					{/* 封面圖 */}

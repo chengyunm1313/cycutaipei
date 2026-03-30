@@ -25,6 +25,7 @@ interface ProductInput {
 	isFeatured?: boolean;
 	sortOrder?: number;
 	status?: 'published' | 'draft';
+	postDate?: string | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -109,6 +110,7 @@ export async function POST(request: NextRequest) {
 				isFeatured: data.isFeatured ?? false,
 				sortOrder: data.sortOrder ?? 0,
 				status: data.status || 'published',
+				postDate: data.postDate ?? null,
 			})
 			.returning();
 

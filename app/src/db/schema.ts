@@ -34,6 +34,7 @@ export const products = sqliteTable('products', {
 	isFeatured: integer('is_featured', { mode: 'boolean' }).default(false),
 	sortOrder: integer('sort_order').notNull().default(0),
 	status: text('status', { enum: ['published', 'draft'] }).default('published'),
+	postDate: text('post_date'),
 	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
@@ -49,6 +50,7 @@ export const articles = sqliteTable('articles', {
 	status: text('status', { enum: ['published', 'draft'] }).default('published'),
 	seoTitle: text('seo_title'),
 	seoDescription: text('seo_description'),
+	postDate: text('post_date'),
 	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 	updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });

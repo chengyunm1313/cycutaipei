@@ -7,6 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ArticleCard from '@/components/ArticleCard';
 import { fetchArticleBySlug, fetchArticles } from '@/lib/api';
 import type { ApiArticle } from '@/data/types';
+import { resolveContentDate } from '@/lib/contentDate';
 
 export const runtime = 'edge';
 
@@ -95,6 +96,7 @@ export default function BlogPostPage({ params }: PageProps) {
 		/(^\/api\/media\/)|(:\/\/[^/]+\/api\/media\/)/i.test(coverImage);
 	const author = article.author || '匿名';
 	const content = article.content || '';
+	const displayDate = resolveContentDate(article);
 
 	return (
 		<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
@@ -132,8 +134,8 @@ export default function BlogPostPage({ params }: PageProps) {
 						<span className='font-medium text-text'>{author}</span>
 					</div>
 					<span>·</span>
-					<time dateTime={article.createdAt}>
-						{new Date(article.createdAt).toLocaleDateString('zh-TW', {
+					<time dateTime={displayDate}>
+						{new Date(displayDate).toLocaleDateString('zh-TW', {
 							year: 'numeric',
 							month: 'long',
 							day: 'numeric',
@@ -219,7 +221,7 @@ export default function BlogPostPage({ params }: PageProps) {
 						description: article.excerpt || '',
 						image: coverImage,
 						author: { '@type': 'Person', name: author },
-						datePublished: article.createdAt,
+						datePublished: displayDate,
 						dateModified: article.updatedAt,
 						publisher: {
 							'@type': 'Organization',

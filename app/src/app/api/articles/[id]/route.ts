@@ -63,6 +63,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 			status?: 'published' | 'draft';
 			seoTitle?: string;
 			seoDescription?: string;
+			postDate?: string | null;
 		};
 
 		const updated = await db
@@ -78,6 +79,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 				status: data.status,
 				seoTitle: data.seoTitle,
 				seoDescription: data.seoDescription,
+				postDate: data.postDate ?? null,
 				updatedAt: new Date().toISOString(),
 			})
 			.where(eq(articles.id, articleId))

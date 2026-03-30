@@ -41,6 +41,7 @@ export interface ApiProduct {
 	isFeatured: number | boolean;
 	sortOrder: number;
 	status: string;
+	postDate: string | null;
 	createdAt: string;
 }
 
@@ -113,6 +114,7 @@ export interface ApiArticle {
 	status: string;
 	seoTitle: string | null;
 	seoDescription: string | null;
+	postDate: string | null;
 	createdAt: string;
 	updatedAt: string;
 }

@@ -5,6 +5,7 @@ import ArticleCard from '@/components/ArticleCard';
 import Breadcrumb from '@/components/Breadcrumb';
 import { fetchArticles } from '@/lib/api';
 import type { ApiArticle } from '@/data/types';
+import { resolveContentDate } from '@/lib/contentDate';
 
 /**
  * 部落格列表頁
@@ -36,7 +37,9 @@ export default function BlogPage() {
 		if (selectedCategory) {
 			result = result.filter((a) => a.category === selectedCategory);
 		}
-		return result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+		return result.sort(
+			(a, b) => new Date(resolveContentDate(b)).getTime() - new Date(resolveContentDate(a)).getTime()
+		);
 	}, [articles, selectedCategory]);
 
 	return (

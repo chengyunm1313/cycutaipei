@@ -19,6 +19,7 @@ interface ArticleInput {
 	status?: 'published' | 'draft';
 	seoTitle?: string;
 	seoDescription?: string;
+	postDate?: string | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
 				status: data.status || 'draft',
 				seoTitle: data.seoTitle,
 				seoDescription: data.seoDescription,
+				postDate: data.postDate ?? null,
 			})
 			.returning();
 

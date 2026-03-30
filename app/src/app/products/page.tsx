@@ -7,6 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import Pagination from '@/components/Pagination';
 import { fetchProducts, fetchCategories } from '@/lib/api';
 import type { ApiProduct, ApiCategory } from '@/data/types';
+import { resolveContentDate } from '@/lib/contentDate';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -48,7 +49,7 @@ function ProductsContent() {
 
 		result.sort((a, b) => {
 			if (sortBy === 'newest') {
-				return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+				return new Date(resolveContentDate(b)).getTime() - new Date(resolveContentDate(a)).getTime();
 			}
 			return a.name.localeCompare(b.name, 'zh-TW');
 		});

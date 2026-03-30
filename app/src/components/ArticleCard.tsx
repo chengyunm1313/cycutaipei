@@ -1,5 +1,6 @@
 import AppLink from '@/components/AppLink';
 import Image from 'next/image';
+import { resolveContentDate } from '@/lib/contentDate';
 
 /**
  * 文章卡片元件通用介面
@@ -12,6 +13,7 @@ interface ArticleCardData {
 	coverImage?: string | null;
 	category?: string | null;
 	author?: string | null;
+	postDate?: string | null;
 	createdAt: string;
 }
 
@@ -27,6 +29,7 @@ export default function ArticleCard({ article }: { article: ArticleCardData }) {
 	const category = article.category || '未分類';
 	const author = article.author || '匿名';
 	const excerpt = article.excerpt || '';
+	const displayDate = resolveContentDate(article);
 
 	return (
 		<AppLink href={`/blog/${article.slug}`} className='group block cursor-pointer'>
@@ -71,8 +74,8 @@ export default function ArticleCard({ article }: { article: ArticleCardData }) {
 					<div className='flex items-center gap-2 text-xs text-text-light mb-2.5'>
 						<span>{author}</span>
 						<span>·</span>
-						<time dateTime={article.createdAt}>
-							{new Date(article.createdAt).toLocaleDateString('zh-TW', {
+						<time dateTime={displayDate}>
+							{new Date(displayDate).toLocaleDateString('zh-TW', {
 								year: 'numeric',
 								month: 'long',
 								day: 'numeric',

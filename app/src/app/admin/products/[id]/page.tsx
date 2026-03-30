@@ -86,6 +86,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 	const [introVideoUrl, setIntroVideoUrl] = useState('');
 	const [isFeatured, setIsFeatured] = useState(false);
 	const [sortOrder, setSortOrder] = useState<number>(0);
+	const [postDate, setPostDate] = useState('');
 	const [specs, setSpecs] = useState<ProductSpec[]>([]);
 
 	const [loading, setLoading] = useState(true);
@@ -122,6 +123,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				setIntroVideoUrl(prod.introVideoUrl || '');
 				setIsFeatured(!!prod.isFeatured);
 				setSortOrder(prod.sortOrder ?? 0);
+				setPostDate(prod.postDate || '');
 				setSpecs(parseProductSpecs(prod.specs));
 				setCategories(Array.isArray(cats) ? cats : []);
 			})
@@ -186,6 +188,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				specs: specs.length > 0 ? JSON.stringify(specs) : null,
 				isFeatured,
 				sortOrder,
+				postDate: postDate || null,
 			});
 			showToast('活動資訊已更新！', 'success');
 			// router.push('/admin/products'); // 移除自動跳轉
@@ -285,6 +288,19 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									onChange={(e) => setSlug(e.target.value)}
 									required
 									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
+								/>
+							</div>
+
+							<div>
+								<label htmlFor='postDate' className='block text-sm font-medium text-text mb-1.5'>
+									原始活動日期
+								</label>
+								<input
+									id='postDate'
+									type='date'
+									value={postDate}
+									onChange={(e) => setPostDate(e.target.value)}
+									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 								/>
 							</div>
 

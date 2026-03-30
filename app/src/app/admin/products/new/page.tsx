@@ -34,6 +34,7 @@ export default function NewProductPage() {
 	const [introVideoUrl, setIntroVideoUrl] = useState('');
 	const [isFeatured, setIsFeatured] = useState(false);
 	const [sortOrder, setSortOrder] = useState<number>(0);
+	const [postDate, setPostDate] = useState('');
 	const [price, setPrice] = useState<number | ''>('');
 	const [specs, setSpecs] = useState<{ label: string; value: string }[]>([]);
 	const [content, setContent] = useState('');
@@ -108,6 +109,7 @@ export default function NewProductPage() {
 				specs: specs.length > 0 ? JSON.stringify(specs) : null,
 				isFeatured,
 				sortOrder,
+				postDate: postDate || null,
 				content: content || null,
 			});
 			alert('活動資訊已新增！');
@@ -195,6 +197,18 @@ export default function NewProductPage() {
 					</div>
 
 					<div className='grid grid-cols-2 gap-4'>
+						<div className='col-span-2 sm:col-span-1'>
+							<label htmlFor='postDate' className='block text-sm font-medium text-text mb-1.5'>
+								原始活動日期
+							</label>
+							<input
+								id='postDate'
+								type='date'
+								value={postDate}
+								onChange={(e) => setPostDate(e.target.value)}
+								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
+							/>
+						</div>
 						<div className='col-span-2 sm:col-span-1'>
 							<label htmlFor='price' className='block text-sm font-medium text-text mb-1.5'>
 								價錢：

@@ -50,6 +50,7 @@ interface ProductUpdateInput {
 	isFeatured?: boolean;
 	sortOrder?: number;
 	status?: 'published' | 'draft';
+	postDate?: string | null;
 }
 
 /** PUT: 更新產品 */
@@ -85,6 +86,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 				isFeatured: data.isFeatured,
 				sortOrder: data.sortOrder,
 				status: data.status,
+				postDate: data.postDate ?? null,
 			})
 			.where(eq(products.id, productId))
 			.returning();

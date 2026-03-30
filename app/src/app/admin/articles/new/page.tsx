@@ -38,6 +38,7 @@ export default function NewArticlePage() {
 	const [coverImage, setCoverImage] = useState('');
 	const [seoTitle, setSeoTitle] = useState('');
 	const [seoDescription, setSeoDescription] = useState('');
+	const [postDate, setPostDate] = useState('');
 	const [editorContent, setEditorContent] = useState('');
 	const [initialEditorHtml, setInitialEditorHtml] = useState('');
 	const [stats, setStats] = useState({ chars: 0, words: 0, readTime: 1 });
@@ -60,6 +61,7 @@ export default function NewArticlePage() {
 				if (data.coverImage) setCoverImage(data.coverImage);
 				if (data.seoTitle) setSeoTitle(data.seoTitle);
 				if (data.seoDescription) setSeoDescription(data.seoDescription);
+				if (data.postDate) setPostDate(data.postDate);
 				if (data.editorContent) {
 					setEditorContent(data.editorContent);
 					setInitialEditorHtml(data.editorContent);
@@ -87,13 +89,14 @@ export default function NewArticlePage() {
 				coverImage,
 				seoTitle,
 				seoDescription,
+				postDate,
 				editorContent,
 				lastSaved: new Date().toISOString(),
 			};
 			localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
 			setLastSaved(data.lastSaved);
 		}, 2000);
-	}, [title, slug, excerpt, category, coverImage, seoTitle, seoDescription, editorContent]);
+	}, [title, slug, excerpt, category, coverImage, seoTitle, seoDescription, postDate, editorContent]);
 
 	// 每次表單變動觸發 autoSave
 	useEffect(() => {
@@ -136,6 +139,7 @@ export default function NewArticlePage() {
 			content: editorContent,
 			seoTitle,
 			seoDescription,
+			postDate: postDate || null,
 			status,
 		};
 		try {
@@ -328,6 +332,18 @@ export default function NewArticlePage() {
 									</option>
 								))}
 							</select>
+						</div>
+
+						<div>
+							<label className='block text-xs font-semibold text-text-muted uppercase tracking-wider mb-2'>
+								原始發文日期
+							</label>
+							<input
+								type='date'
+								value={postDate}
+								onChange={(e) => setPostDate(e.target.value)}
+								className='w-full px-3 py-2 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
+							/>
 						</div>
 
 						{/* Slug */}
