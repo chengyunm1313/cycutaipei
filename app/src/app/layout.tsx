@@ -5,8 +5,6 @@ import Footer from '@/components/Footer';
 import { fetchSiteSettings } from '@/lib/api';
 import './globals.css';
 
-export const dynamic = 'force-dynamic';
-
 const inter = Inter({
 	variable: '--font-inter',
 	subsets: ['latin'],
@@ -21,7 +19,7 @@ const notoSansTC = Noto_Sans_TC({
 
 const defaultMetadata: Metadata = {
 	title: {
-		default: '中原大學台北市校友會 | 校友交流與活動平台',
+		default: '中原大學台北市校友會｜最新消息與活動資訊',
 		template: '%s | 中原大學台北市校友會',
 	},
 	description: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
