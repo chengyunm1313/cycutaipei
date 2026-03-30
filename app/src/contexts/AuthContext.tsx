@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { checkPermission, type Role, type Permission } from '@/data/types';
 import { loginApi } from '@/lib/api';
 import { authenticateUser } from '@/data/mock';
@@ -42,13 +42,7 @@ function loadStoredUser(): SafeUser | null {
  * 優先使用 D1 API 驗證，失敗時 fallback 至 mock
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const [currentUser, setCurrentUser] = useState<SafeUser | null>(null);
-
-	// 在客戶端載入 localStorage 中的使用者，避免 SSR hydration 不匹配
-	useEffect(() => {
-		const stored = loadStoredUser();
-		if (stored) setCurrentUser(stored);
-	}, []);
+	const [currentUser, setCurrentUser] = useState<SafeUser | null>(() => loadStoredUser());
 
 	const login = async (username: string, password: string): Promise<boolean> => {
 		try {
