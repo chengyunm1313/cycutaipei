@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			next: { revalidate: 0 },
 		});
 		const siteName = settings.siteName?.trim() || '中原大學台北市校友會';
-		const title = settings.siteTitle?.trim() || `${siteName} | 校友交流與活動平台`;
+		const title = settings.siteTitle?.trim() || `${siteName}｜最新消息與活動資訊`;
 		const description =
 			settings.metaDescription?.trim() ||
 			'串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。';
