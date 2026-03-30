@@ -1,9 +1,10 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import AppLink from '@/components/AppLink';
 import CurrentYear from '@/components/CurrentYear';
 import { fetchCategories, fetchMenus, fetchSiteSettings } from '@/lib/api';
 import type { ApiCategory, ApiMenu } from '@/data/types';
-
-export const runtime = 'edge';
 
 function resolveMenuHref(menu: ApiMenu): string {
 	const custom = menu.customLink?.trim();
@@ -17,79 +18,90 @@ function isExternalUrl(url: string): boolean {
 
 /**
  * 底部頁尾
- * 包含公司資訊、快速連結、分類連結、聯絡方式
+ * 改由瀏覽器端抓取站台設定，避免靜態頁面把 build 階段的 fallback 內容固定下來。
  */
-export default async function Footer() {
-	let siteName = '中原大學台北市校友會';
-	let siteDescription = '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。';
-	let bottomMenus: ApiMenu[] = [];
-	let productCategories: ApiCategory[] = [];
-	let contactPhone = '';
-	let contactEmail = '';
-	let contactAddress = '';
-	let copyright = '';
+export default function Footer() {
+	const [siteName, setSiteName] = useState('中原大學台北市校友會');
+	const [siteDescription, setSiteDescription] = useState(
+		'串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。'
+	);
+	const [bottomMenus, setBottomMenus] = useState<ApiMenu[]>([]);
+	const [productCategories, setProductCategories] = useState<ApiCategory[]>([]);
+	const [contactPhone, setContactPhone] = useState('');
+	const [contactEmail, setContactEmail] = useState('');
+	const [contactAddress, setContactAddress] = useState('');
+	const [copyright, setCopyright] = useState('');
 
-	try {
-		const [settings, menus, categoryList] = await Promise.all([
-			fetchSiteSettings({
-				next: { revalidate: 0 },
-			}),
-			fetchMenus({
-				activeOnly: true,
-				position: 'bottom',
-				requestInit: {
-					next: { revalidate: 0 },
-				},
-			}),
-			fetchCategories({
-				next: { revalidate: 0 },
-			}),
-		]);
-		if (settings.siteName?.trim()) siteName = settings.siteName.trim();
-		if (settings.metaDescription?.trim()) siteDescription = settings.metaDescription.trim();
-		if (settings.phone?.trim()) contactPhone = settings.phone.trim();
-		if (settings.email?.trim()) contactEmail = settings.email.trim();
-		if (settings.address?.trim()) contactAddress = settings.address.trim();
-		if (settings.copyright?.trim()) {
-			copyright = settings.copyright.trim();
-		} else {
-			copyright = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
-		}
+	useEffect(() => {
+		let cancelled = false;
 
-		bottomMenus = Array.isArray(menus)
-			? menus.sort((a: ApiMenu, b: ApiMenu) => a.sortOrder - b.sortOrder)
-			: [];
-		productCategories = Array.isArray(categoryList)
-			? categoryList
-					.filter((item: ApiCategory) => item.isActive)
-					.sort((a: ApiCategory, b: ApiCategory) => a.sortOrder - b.sortOrder)
-					.slice(0, 8)
-			: [];
-	} catch (error) {
-		console.error('Footer load error:', error);
-		// 若 API 失敗，確保至少有年份版權資訊避開 Hydration 錯誤
-		copyright = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
-	}
+		Promise.all([
+			fetchSiteSettings(),
+			fetchMenus({ activeOnly: true, position: 'bottom' }),
+			fetchCategories(),
+		])
+			.then(([settings, menus, categoryList]) => {
+				if (cancelled) return;
 
-	const quickLinks =
-		bottomMenus.length > 0
-			? bottomMenus.map((menu) => ({
-					id: menu.id,
-					title: menu.title,
-					href: resolveMenuHref(menu),
-					target: menu.target || '_self',
-				}))
-			: [
-					{ id: 'home', title: '首頁', href: '/', target: '_self' },
-					{ id: 'products', title: '活動資訊', href: '/products', target: '_self' },
-					{ id: 'blog', title: '最新消息', href: '/blog', target: '_self' },
-				];
+				const nextSiteName = settings.siteName?.trim() || '中原大學台北市校友會';
+				setSiteName(nextSiteName);
+				setSiteDescription(
+					settings.metaDescription?.trim() ||
+						'串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。'
+				);
+				setContactPhone(settings.phone?.trim() || '');
+				setContactEmail(settings.email?.trim() || '');
+				setContactAddress(settings.address?.trim() || '');
+				setCopyright(
+					settings.copyright?.trim() || `© ${new Date().getFullYear()} ${nextSiteName}. All rights reserved.`
+				);
+
+				setBottomMenus(
+					Array.isArray(menus)
+						? [...menus].sort((a, b) => a.sortOrder - b.sortOrder)
+						: []
+				);
+				setProductCategories(
+					Array.isArray(categoryList)
+						? categoryList
+								.filter((item) => item.isActive)
+								.sort((a, b) => a.sortOrder - b.sortOrder)
+								.slice(0, 8)
+						: []
+				);
+			})
+			.catch((error) => {
+				console.error('Footer load error:', error);
+				if (cancelled) return;
+				setCopyright((current) => current || `© ${new Date().getFullYear()} 中原大學台北市校友會. All rights reserved.`);
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	const quickLinks = useMemo(
+		() =>
+			bottomMenus.length > 0
+				? bottomMenus.map((menu) => ({
+						id: menu.id,
+						title: menu.title,
+						href: resolveMenuHref(menu),
+						target: menu.target || '_self',
+					}))
+				: [
+						{ id: 'home', title: '首頁', href: '/', target: '_self' },
+						{ id: 'products', title: '活動資訊', href: '/products', target: '_self' },
+						{ id: 'blog', title: '最新消息', href: '/blog', target: '_self' },
+					],
+		[bottomMenus]
+	);
 
 	return (
 		<footer className='bg-text text-white'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16'>
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12'>
-					{/* 公司資訊 */}
 					<div>
 						<div className='flex items-center gap-2 mb-4'>
 							<div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
@@ -112,7 +124,6 @@ export default async function Footer() {
 						<p className='text-sm text-gray-400 leading-relaxed mb-4'>{siteDescription}</p>
 					</div>
 
-					{/* 快速連結 */}
 					<div>
 						<h3 className='text-sm font-semibold uppercase tracking-wider mb-4'>快速連結</h3>
 						<ul className='space-y-2.5'>
@@ -141,7 +152,6 @@ export default async function Footer() {
 						</ul>
 					</div>
 
-					{/* 活動分類 */}
 					<div>
 						<h3 className='text-sm font-semibold uppercase tracking-wider mb-4'>活動分類</h3>
 						<ul className='space-y-2.5'>
@@ -162,7 +172,6 @@ export default async function Footer() {
 						</ul>
 					</div>
 
-					{/* 聯絡方式 */}
 					<div>
 						<h3 className='text-sm font-semibold uppercase tracking-wider mb-4'>聯絡我們</h3>
 						<ul className='space-y-3'>
@@ -201,7 +210,9 @@ export default async function Footer() {
 										d='M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'
 									/>
 								</svg>
-								<span className='text-sm text-gray-400'>{contactEmail || '請透過 Facebook 粉專聯絡'}</span>
+								<span className='text-sm text-gray-400'>
+									{contactEmail || '請透過 Facebook 粉專聯絡'}
+								</span>
 							</li>
 							<li className='flex items-start gap-2.5'>
 								<svg
@@ -223,7 +234,6 @@ export default async function Footer() {
 					</div>
 				</div>
 
-				{/* 底部版權 */}
 				<div className='border-t border-gray-700 mt-10 pt-8 text-center'>
 					<p className='text-sm text-gray-500'>
 						{copyright || (
