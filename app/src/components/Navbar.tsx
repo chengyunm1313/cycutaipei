@@ -135,12 +135,16 @@ function MenuLinkItem({ menu, className, children, onClick }: MenuLinkProps) {
  * 響應式導覽列
  * 包含 Logo、導覽連結、搜尋框、行動版漢堡選單
  */
-export default function Navbar() {
+interface NavbarProps {
+	initialSiteName?: string;
+}
+
+export default function Navbar({ initialSiteName = '產品型錄平台' }: NavbarProps) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [categoryList, setCategoryList] = useState<ApiCategory[]>([]);
 	const [menuList, setMenuList] = useState<ApiMenu[]>(fallbackMenus);
-	const [siteName, setSiteName] = useState('產品型錄平台');
+	const [siteName, setSiteName] = useState(initialSiteName);
 	const router = useRouter();
 
 	useEffect(() => {

@@ -68,15 +68,26 @@ export async function generateMetadata(): Promise<Metadata> {
 	}
 }
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	let initialSiteName = '產品型錄平台';
+
+	try {
+		const settings = await fetchSiteSettings();
+		if (settings.siteName?.trim()) {
+			initialSiteName = settings.siteName.trim();
+		}
+	} catch (error) {
+		console.error('Layout site settings load error:', error);
+	}
+
 	return (
 		<html lang='zh-TW' suppressHydrationWarning>
 			<body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
-				<Navbar />
+				<Navbar initialSiteName={initialSiteName} />
 				<main className='pt-16 min-h-screen'>{children}</main>
 				<Footer />
 			</body>
