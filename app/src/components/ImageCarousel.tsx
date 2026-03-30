@@ -15,6 +15,10 @@ export default function ImageCarousel({
 	productName: string;
 }) {
 	const [activeIndex, setActiveIndex] = useState(0);
+	const activeImage = images[activeIndex] || '';
+	const shouldBypassImageOptimization =
+		/(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(activeImage) ||
+		/(^\/api\/media\/)|(:\/\/[^/]+\/api\/media\/)/i.test(activeImage);
 
 	if (images.length === 0) return null;
 
@@ -23,9 +27,10 @@ export default function ImageCarousel({
 			{/* 主圖 */}
 			<div className='relative aspect-[4/3] rounded-2xl overflow-hidden bg-surface-alt'>
 				<Image
-					src={images[activeIndex]}
+					src={activeImage}
 					alt={`${productName} - 圖片 ${activeIndex + 1}`}
 					fill
+					unoptimized={shouldBypassImageOptimization}
 					className='object-cover'
 					sizes='(max-width: 768px) 100vw, 50vw'
 					priority
@@ -83,6 +88,11 @@ export default function ImageCarousel({
 			{images.length > 1 && (
 				<div className='flex gap-2 overflow-x-auto pb-1'>
 					{images.map((img, index) => (
+						(() => {
+							const shouldBypassThumbOptimization =
+								/(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(img) ||
+								/(^\/api\/media\/)|(:\/\/[^/]+\/api\/media\/)/i.test(img);
+							return (
 						<button
 							key={index}
 							onClick={() => setActiveIndex(index)}
@@ -97,10 +107,13 @@ export default function ImageCarousel({
 								src={img}
 								alt={`${productName} - 縮圖 ${index + 1}`}
 								fill
+								unoptimized={shouldBypassThumbOptimization}
 								className='object-cover'
 								sizes='64px'
 							/>
 						</button>
+							);
+						})()
 					))}
 				</div>
 			)}

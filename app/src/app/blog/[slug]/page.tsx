@@ -90,6 +90,9 @@ export default function BlogPostPage({ params }: PageProps) {
 	}
 
 	const coverImage = article.coverImage || '';
+	const shouldBypassImageOptimization =
+		/(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(coverImage) ||
+		/(^\/api\/media\/)|(:\/\/[^/]+\/api\/media\/)/i.test(coverImage);
 	const author = article.author || '匿名';
 	const content = article.content || '';
 
@@ -146,6 +149,7 @@ export default function BlogPostPage({ params }: PageProps) {
 						src={coverImage}
 						alt={article.title}
 						fill
+						unoptimized={shouldBypassImageOptimization}
 						className='object-cover'
 						sizes='(max-width: 1024px) 100vw, 896px'
 						priority

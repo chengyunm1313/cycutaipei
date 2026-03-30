@@ -19,7 +19,9 @@ export default function ProductCard({
 		product.listImage ||
 		images[0] ||
 		'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop';
-	const isFacebookCdnImage = /(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(firstImage);
+	const shouldBypassImageOptimization =
+		/(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(firstImage) ||
+		/(^\/api\/media\/)|(:\/\/[^/]+\/api\/media\/)/i.test(firstImage);
 
 	return (
 		<AppLink
@@ -32,7 +34,7 @@ export default function ProductCard({
 					src={firstImage}
 					alt={product.name}
 					fill
-					unoptimized={isFacebookCdnImage}
+					unoptimized={shouldBypassImageOptimization}
 					className='object-cover group-hover:scale-105 transition-transform duration-500'
 					sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 				/>
