@@ -33,7 +33,11 @@ export async function GET(request: NextRequest) {
 		const status = searchParams.get('status');
 		const slug = searchParams.get('slug');
 
-		const allArticles = await db.select().from(articles).orderBy(desc(articles.createdAt)).all();
+		const allArticles = await db
+			.select()
+			.from(articles)
+			.orderBy(desc(articles.createdAt), desc(articles.id))
+			.all();
 
 		// 若有 slug 參數，回傳單篇文章
 		if (slug) {

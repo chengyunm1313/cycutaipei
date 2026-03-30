@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
-import { desc, eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { articleCategories } from '@/db/schema';
 import { ensureArticleCategoriesTable } from '@/db/ensureArticleCategoriesTable';
@@ -25,9 +25,9 @@ function slugify(input: string): string {
 async function ensureDefaultArticleCategories(db: ReturnType<typeof getDb>) {
 	const existing = await db.select().from(articleCategories).all();
 	const defaults = [
-		{ name: '會務公告', slug: 'association-announcement', sortOrder: 20, isActive: true },
-		{ name: '活動報導', slug: 'event-report', sortOrder: 10, isActive: true },
-		{ name: '最新消息', slug: 'latest-news', sortOrder: 0, isActive: true },
+		{ name: '活動預告', slug: 'event-announcement', sortOrder: 0, isActive: true },
+		{ name: '活動報導', slug: 'event-report', sortOrder: 1, isActive: true },
+		{ name: '會務公告', slug: 'association-announcement', sortOrder: 2, isActive: true },
 	];
 
 	// 舊版誤植預設值（分類一/分類二）若存在，先清除再補上正式分類
@@ -65,12 +65,12 @@ export async function GET(request: NextRequest) {
 					.select()
 					.from(articleCategories)
 					.where(eq(articleCategories.isActive, true))
-					.orderBy(desc(articleCategories.sortOrder), desc(articleCategories.id))
+					.orderBy(asc(articleCategories.sortOrder), asc(articleCategories.id))
 					.all()
 			: await db
 					.select()
 					.from(articleCategories)
-					.orderBy(desc(articleCategories.sortOrder), desc(articleCategories.id))
+					.orderBy(asc(articleCategories.sortOrder), asc(articleCategories.id))
 					.all();
 
 		return NextResponse.json(rows);
