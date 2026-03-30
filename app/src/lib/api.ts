@@ -268,8 +268,8 @@ export async function deleteProductApi(id: number): Promise<void> {
 
 // ===== Categories =====
 
-export async function fetchCategories(): Promise<ApiCategory[]> {
-	return fetchJson<ApiCategory[]>('/api/categories');
+export async function fetchCategories(options?: RequestInit): Promise<ApiCategory[]> {
+	return fetchJson<ApiCategory[]>('/api/categories', options);
 }
 
 export async function updateCategoryOrderApi(updates: { id: number; order: number }[]) {

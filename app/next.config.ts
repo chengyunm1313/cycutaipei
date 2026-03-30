@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'cdn.pixabay.com',
 			},
+			{
+				protocol: 'https',
+				hostname: '**.fbcdn.net',
+			},
+			{
+				protocol: 'https',
+				hostname: '*.facebook.com',
+			},
 		],
 	},
 	// Cloudflare Pages 部署時所需的設定，如果是靜態輸出（純 HTML）

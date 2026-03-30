@@ -31,12 +31,19 @@ export default async function Footer() {
 
 	try {
 		const [settings, menus, categoryList] = await Promise.all([
-			fetchSiteSettings(),
+			fetchSiteSettings({
+				next: { revalidate: 0 },
+			}),
 			fetchMenus({
 				activeOnly: true,
 				position: 'bottom',
+				requestInit: {
+					next: { revalidate: 0 },
+				},
 			}),
-			fetchCategories(),
+			fetchCategories({
+				next: { revalidate: 0 },
+			}),
 		]);
 		if (settings.siteName?.trim()) siteName = settings.siteName.trim();
 		if (settings.metaDescription?.trim()) siteDescription = settings.metaDescription.trim();
@@ -49,11 +56,15 @@ export default async function Footer() {
 			copyright = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
 		}
 
-		bottomMenus = menus.sort((a: ApiMenu, b: ApiMenu) => a.sortOrder - b.sortOrder);
-		productCategories = categoryList
-			.filter((item: ApiCategory) => item.isActive)
-			.sort((a: ApiCategory, b: ApiCategory) => a.sortOrder - b.sortOrder)
-			.slice(0, 8);
+		bottomMenus = Array.isArray(menus)
+			? menus.sort((a: ApiMenu, b: ApiMenu) => a.sortOrder - b.sortOrder)
+			: [];
+		productCategories = Array.isArray(categoryList)
+			? categoryList
+					.filter((item: ApiCategory) => item.isActive)
+					.sort((a: ApiCategory, b: ApiCategory) => a.sortOrder - b.sortOrder)
+					.slice(0, 8)
+			: [];
 	} catch (error) {
 		console.error('Footer load error:', error);
 		// 若 API 失敗，確保至少有年份版權資訊避開 Hydration 錯誤

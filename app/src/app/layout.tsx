@@ -34,7 +34,9 @@ const defaultMetadata: Metadata = {
 
 export async function generateMetadata(): Promise<Metadata> {
 	try {
-		const settings = await fetchSiteSettings();
+		const settings = await fetchSiteSettings({
+			next: { revalidate: 0 },
+		});
 		const siteName = settings.siteName?.trim() || '中原大學台北市校友會';
 		const title = settings.siteTitle?.trim() || `${siteName} | 校友交流與活動平台`;
 		const description =
@@ -76,7 +78,9 @@ export default async function RootLayout({
 	let initialSiteName = '中原大學台北市校友會';
 
 	try {
-		const settings = await fetchSiteSettings();
+		const settings = await fetchSiteSettings({
+			next: { revalidate: 0 },
+		});
 		if (settings.siteName?.trim()) {
 			initialSiteName = settings.siteName.trim();
 		}

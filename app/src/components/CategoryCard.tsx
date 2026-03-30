@@ -16,6 +16,7 @@ export default function CategoryCard({
 	const imageUrl =
 		category.image ||
 		'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop';
+	const isFacebookCdnImage = /(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(imageUrl);
 	return (
 		<AppLink
 			href={`/category/${category.slug}`}
@@ -26,6 +27,7 @@ export default function CategoryCard({
 				src={imageUrl}
 				alt={category.name}
 				fill
+				unoptimized={isFacebookCdnImage}
 				className='object-cover group-hover:scale-110 transition-transform duration-700'
 				sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
 			/>

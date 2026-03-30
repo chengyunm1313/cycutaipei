@@ -21,6 +21,7 @@ interface ArticleCardData {
  */
 export default function ArticleCard({ article }: { article: ArticleCardData }) {
 	const coverImage = article.coverImage || '/images/placeholder.jpg';
+	const isFacebookCdnImage = /(^https?:\/\/)?([^/]+\.)?fbcdn\.net(\/|$)/i.test(coverImage);
 	const category = article.category || '未分類';
 	const author = article.author || '匿名';
 	const excerpt = article.excerpt || '';
@@ -35,6 +36,7 @@ export default function ArticleCard({ article }: { article: ArticleCardData }) {
 							src={coverImage}
 							alt={article.title}
 							fill
+							unoptimized={isFacebookCdnImage}
 							className='object-cover group-hover:scale-105 transition-transform duration-500'
 							sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 						/>
