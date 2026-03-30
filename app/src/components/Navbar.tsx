@@ -139,7 +139,7 @@ interface NavbarProps {
 	initialSiteName?: string;
 }
 
-export default function Navbar({ initialSiteName = '產品型錄平台' }: NavbarProps) {
+export default function Navbar({ initialSiteName = '中原大學台北市校友會' }: NavbarProps) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [categoryList, setCategoryList] = useState<ApiCategory[]>([]);
@@ -346,7 +346,7 @@ export default function Navbar({ initialSiteName = '產品型錄平台' }: Navba
 						<div className='relative'>
 							<input
 								type='text'
-								placeholder='搜尋產品...'
+								placeholder='搜尋活動資訊...'
 								value={searchQuery}
 								onChange={(event) => setSearchQuery(event.target.value)}
 								className='w-56 pl-9 pr-4 py-2 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
@@ -410,7 +410,7 @@ export default function Navbar({ initialSiteName = '產品型錄平台' }: Navba
 							<div className='relative'>
 								<input
 									type='text'
-									placeholder='搜尋產品...'
+									placeholder='搜尋活動資訊...'
 									value={searchQuery}
 									onChange={(event) => setSearchQuery(event.target.value)}
 									className='w-full pl-9 pr-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'

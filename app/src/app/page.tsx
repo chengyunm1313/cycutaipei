@@ -8,7 +8,7 @@ export const runtime = 'edge';
 
 /**
  * 首頁
- * Hero 區塊 + 精選產品 + 產品分類 + 最新產品
+ * Hero 區塊 + 精選活動 + 活動分類 + 最新活動
  */
 export default async function HomePage() {
 	const [products, categories, carouselItems, homeAboutList, carouselConfig] = await Promise.all([
@@ -35,10 +35,10 @@ export default async function HomePage() {
 
 	const homeAboutTitle = homeAbout?.title || '關於我們';
 	const homeAboutSummary =
-		homeAbout?.summary || '持續提供穩定、可靠且可快速導入的產品型錄解決方案。';
+		homeAbout?.summary || '串聯校友情誼、促進母校互動，持續推動校友交流與會務發展。';
 	const homeAboutContent =
 		homeAbout?.content ||
-		'<p>我們專注於企業產品展示與內容管理，協助團隊快速建立品牌網站，並有效維護型錄與知識內容。</p>';
+		'<p>我們致力於促進校友與母校之間的互動、互惠，透過活動、公告與服務資訊，凝聚中原人在台北的連結與認同。</p>';
 	const homeAboutLink = homeAbout?.linkUrl || '/about';
 	const homeAboutImage = homeAbout?.imageUrl || '';
 
@@ -47,12 +47,12 @@ export default async function HomePage() {
 			{/* ===== Hero 區塊 (輪播) ===== */}
 			<HomeCarousel items={carouselItems} settings={carouselSettings} />
 
-			{/* ===== 精選產品 ===== */}
+			{/* ===== 精選活動 ===== */}
 			<section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
 				<div className='flex items-end justify-between mb-8'>
 					<div>
-						<h2 className='text-2xl sm:text-3xl font-bold text-text'>精選產品</h2>
-						<p className='text-text-muted mt-2'>為您推薦的優質產品</p>
+						<h2 className='text-2xl sm:text-3xl font-bold text-text'>精選活動</h2>
+						<p className='text-text-muted mt-2'>精選近期活動與校友交流重點內容</p>
 					</div>
 					<AppLink
 						href='/products'
@@ -73,7 +73,7 @@ export default async function HomePage() {
 						))
 					) : (
 						<div className='sm:col-span-2 lg:col-span-4 rounded-2xl border border-border bg-surface px-6 py-10 text-center text-text-light'>
-							目前尚無精選產品。
+							目前尚無精選活動。
 						</div>
 					)}
 				</div>
@@ -96,7 +96,7 @@ export default async function HomePage() {
 								rel={homeAboutLink.startsWith('http') ? 'noreferrer' : undefined}
 								className='inline-flex mt-5 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors'
 							>
-								More 前往連結
+								了解更多
 							</a>
 						</div>
 						<div className='rounded-2xl border border-border overflow-hidden bg-white min-h-[260px]'>
@@ -115,11 +115,11 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			{/* ===== 產品分類 ===== */}
+			{/* ===== 活動分類 ===== */}
 			<section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
 				<div className='text-center mb-10'>
-					<h2 className='text-2xl sm:text-3xl font-bold text-text'>產品分類</h2>
-					<p className='text-text-muted mt-2'>依類別瀏覽我們的產品線</p>
+					<h2 className='text-2xl sm:text-3xl font-bold text-text'>活動分類</h2>
+					<p className='text-text-muted mt-2'>依主題瀏覽校友會活動與服務內容</p>
 				</div>
 
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
@@ -133,19 +133,19 @@ export default async function HomePage() {
 						))
 					) : (
 						<div className='sm:col-span-2 lg:col-span-4 rounded-2xl border border-border bg-surface px-6 py-10 text-center text-text-light'>
-							目前尚未建立產品分類。
+							目前尚未建立活動分類。
 						</div>
 					)}
 				</div>
 			</section>
 
-			{/* ===== 最新產品 ===== */}
+			{/* ===== 最新活動 ===== */}
 			<section className='bg-surface-alt'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
 					<div className='flex items-end justify-between mb-8'>
 						<div>
-							<h2 className='text-2xl sm:text-3xl font-bold text-text'>最新產品</h2>
-							<p className='text-text-muted mt-2'>最近上架的產品資訊</p>
+							<h2 className='text-2xl sm:text-3xl font-bold text-text'>最新活動</h2>
+							<p className='text-text-muted mt-2'>近期發布的活動資訊與報名內容</p>
 						</div>
 						<AppLink
 							href='/products'
@@ -166,7 +166,7 @@ export default async function HomePage() {
 							))
 						) : (
 							<div className='sm:col-span-2 lg:col-span-3 rounded-2xl border border-border bg-white px-6 py-10 text-center text-text-light'>
-								目前尚無最新產品資料。
+								目前尚無最新活動資料。
 							</div>
 						)}
 					</div>

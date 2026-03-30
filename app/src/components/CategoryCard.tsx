@@ -4,7 +4,7 @@ import type { ApiCategory } from '@/data/types';
 
 /**
  * 分類入口卡片
- * 展示分類圖片、名稱、描述、產品數量
+ * 展示分類圖片、名稱、描述、活動數量
  */
 export default function CategoryCard({
 	category,
@@ -40,7 +40,7 @@ export default function CategoryCard({
 				</h3>
 				<p className='text-sm text-gray-300 line-clamp-1 mb-1.5'>{category.description}</p>
 				<div className='flex items-center gap-1.5 text-xs text-gray-400'>
-					<span>{productCount} 項產品</span>
+					<span>{productCount} 筆活動</span>
 					<svg
 						className='w-4 h-4 group-hover:translate-x-1 transition-transform duration-300'
 						fill='none'

@@ -82,10 +82,10 @@ export default function HomeCarousel({ items, settings }: HomeCarouselProps) {
 			<div className='relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center'>
 				<div key={currentIndex} className='animate-fade-in'>
 					<h1 className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6'>
-						{currentItem.title || '專業工業產品型錄'}
+						{currentItem.title || '串聯校友情誼，延續中原精神'}
 					</h1>
 					<p className='text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto mb-10 leading-relaxed'>
-						{currentItem.summary || '涵蓋電子零件、機械設備、測量儀器與包裝材料'}
+						{currentItem.summary || '掌握校友會最新消息、活動資訊與校友服務內容'}
 					</p>
 					<div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
 						<AppLink
@@ -124,7 +124,7 @@ export default function HomeCarousel({ items, settings }: HomeCarouselProps) {
 									d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
 								/>
 							</svg>
-							搜尋產品
+							瀏覽活動
 						</AppLink>
 					</div>
 				</div>

@@ -13,14 +13,14 @@ const corsHeaders = {
 };
 
 const DEFAULT_SITE_SETTINGS: Omit<ApiSiteSettings, 'id' | 'updatedAt'> = {
-	siteName: '產品型錄平台',
-	siteTitle: '產品型錄平台 | 專業工業產品目錄',
+	siteName: '中原大學台北市校友會',
+	siteTitle: '中原大學台北市校友會 | 校友交流與活動平台',
 	logoUrl: null,
 	footerLogoUrl: null,
 	faviconUrl: null,
 	socialShareImageUrl: null,
-	metaDescription: '提供最完整的工業產品型錄，涵蓋電子零件、機械設備、測量儀器與包裝材料。',
-	metaKeywords: '產品型錄,工業產品,電子零件,機械設備,測量儀器',
+	metaDescription: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
+	metaKeywords: '中原大學,台北市校友會,校友活動,最新消息,校友服務',
 	contactLink: null,
 	taxId: null,
 	phone: null,

@@ -41,10 +41,10 @@ const EMPTY_SUMMARY: SnapshotSummary = {
 
 const MODULE_OPTIONS: Array<{ key: SiteSnapshotModuleKey; label: string; description: string }> = [
 	{ key: 'site_settings', label: '網站資訊', description: '站名、SEO、Logo 等設定' },
-	{ key: 'categories', label: '產品分類', description: '產品分類與階層資料' },
-	{ key: 'products', label: '產品資料', description: '產品內容、規格、圖片與排序' },
-	{ key: 'articles', label: '文章資料', description: '部落格文章內容' },
-	{ key: 'article_categories', label: '文章分類', description: '文章分類管理清單' },
+	{ key: 'categories', label: '活動分類', description: '活動分類與階層資料' },
+	{ key: 'products', label: '活動資訊', description: '活動內容、欄位、圖片與排序' },
+	{ key: 'articles', label: '最新消息', description: '最新消息內容' },
+	{ key: 'article_categories', label: '消息分類', description: '最新消息分類管理清單' },
 	{ key: 'tags', label: '標籤', description: '標籤清單資料' },
 	{ key: 'pages', label: '自訂頁面', description: '頁面內容與 SEO 欄位' },
 	{ key: 'menus', label: '導覽選單', description: '前台導覽選單結構' },
@@ -96,7 +96,7 @@ function normalizeModulesForImport(
 	if (mode === 'full') return [...MODULE_KEYS];
 
 	const moduleSet = new Set<SiteSnapshotModuleKey>(selectedModules);
-	// 依賴保護：分類會影響產品，頁面會影響導覽選單。
+	// 依賴保護：活動分類會影響活動資訊，頁面會影響導覽選單。
 	if (moduleSet.has('categories')) moduleSet.add('products');
 	if (moduleSet.has('pages')) moduleSet.add('menus');
 	return MODULE_KEYS.filter((key) => moduleSet.has(key));
@@ -120,7 +120,7 @@ function renderStatRows(summary: SnapshotSummary) {
 			<div className='bg-surface rounded-lg px-3 py-2'>分類：{summary.categories}</div>
 			<div className='bg-surface rounded-lg px-3 py-2'>產品：{summary.products}</div>
 			<div className='bg-surface rounded-lg px-3 py-2'>文章：{summary.articles}</div>
-			<div className='bg-surface rounded-lg px-3 py-2'>文章分類：{summary.article_categories}</div>
+			<div className='bg-surface rounded-lg px-3 py-2'>消息分類：{summary.article_categories}</div>
 			<div className='bg-surface rounded-lg px-3 py-2'>標籤：{summary.tags}</div>
 			<div className='bg-surface rounded-lg px-3 py-2'>頁面：{summary.pages}</div>
 			<div className='bg-surface rounded-lg px-3 py-2'>導覽選單：{summary.menus}</div>
@@ -375,7 +375,7 @@ export default function AdminSiteImportExportPage() {
 								))}
 							</div>
 							<div className='text-xs text-text-light'>
-								已選 {selectedModulesForImport.length} 個模組。若選「產品分類」會自動含「產品資料」；若選「自訂頁面」會自動含「導覽選單」。
+								已選 {selectedModulesForImport.length} 個模組。若選「活動分類」會自動含「活動資訊」；若選「自訂頁面」會自動含「導覽選單」。
 							</div>
 						</div>
 					)}

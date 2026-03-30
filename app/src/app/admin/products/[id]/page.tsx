@@ -62,7 +62,7 @@ function parseProductSpecs(rawSpecs: string | null): ProductSpec[] {
 }
 
 /**
- * 後台 - 編輯產品
+ * 後台 - 編輯活動資訊
  */
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
 	const router = useRouter();
@@ -98,7 +98,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
 	useEffect(() => {
 		if (isNaN(productId)) {
-			setError('無效的產品 ID');
+			setError('無效的活動資訊 ID');
 			setLoading(false);
 			return;
 		}
@@ -127,7 +127,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 			})
 			.catch((err) => {
 				console.error(err);
-				setError('載入產品失敗');
+				setError('載入活動資訊失敗');
 			})
 			.finally(() => setLoading(false));
 	}, [productId]);
@@ -137,8 +137,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 		setError('');
 
 		if (!name || !slug) {
-			setError('請填寫產品名稱與 Slug');
-			showToast('請填寫產品名稱與 Slug', 'error');
+			setError('請填寫活動資訊名稱與 Slug');
+			showToast('請填寫活動資訊名稱與 Slug', 'error');
 			return;
 		}
 
@@ -152,7 +152,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
 		const normalizedCatalogLink = normalizeOptionalHttpUrl(catalogLink);
 		if (catalogLink.trim() && !normalizedCatalogLink) {
-			const msg = '產品型錄連結格式不正確，請輸入完整網址或站內路徑（例如 /catalog.pdf）';
+			const msg = '附件連結格式不正確，請輸入完整網址或站內路徑（例如 /files/activity-guide.pdf）';
 			setError(msg);
 			showToast(msg, 'error');
 			return;
@@ -187,7 +187,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				isFeatured,
 				sortOrder,
 			});
-			showToast('產品已更新！', 'success');
+			showToast('活動資訊已更新！', 'success');
 			// router.push('/admin/products'); // 移除自動跳轉
 			router.refresh();
 		} catch (err) {
@@ -200,11 +200,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 	};
 
 	const handleDelete = async () => {
-		if (!confirm('確定要刪除此產品嗎？此動作無法復原。')) return;
+		if (!confirm('確定要刪除此活動資訊嗎？此動作無法復原。')) return;
 
 		try {
 			await deleteProductApi(productId);
-			showToast('產品已刪除', 'success');
+			showToast('活動資訊已刪除', 'success');
 			router.push('/admin/products');
 			router.refresh();
 		} catch (err) {
@@ -242,13 +242,13 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 							/>
 						</svg>
 					</AppLink>
-					<h1 className='text-2xl font-bold text-text'>編輯產品</h1>
+					<h1 className='text-2xl font-bold text-text'>編輯活動資訊</h1>
 				</div>
 				<button
 					onClick={handleDelete}
 					className='px-4 py-2 text-sm font-medium text-error hover:bg-error/10 rounded-lg transition-colors duration-200'
 				>
-					刪除產品
+					刪除活動資訊
 				</button>
 			</div>
 
@@ -262,7 +262,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 						<div className='space-y-4'>
 							<div>
 								<label htmlFor='name' className='block text-sm font-medium text-text mb-1.5'>
-									產品名稱 <span className='text-error'>*</span>
+									活動名稱 <span className='text-error'>*</span>
 								</label>
 								<input
 									id='name'
@@ -297,7 +297,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									type='number'
 									value={price}
 									onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
-									placeholder='填寫價錢 (產品付款時實際支出的金額)'
+									placeholder='可填寫報名費、餐費或留空'
 									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 								/>
 							</div>
@@ -336,7 +336,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
 							<div>
 								<label htmlFor='catalogLink' className='block text-sm font-medium text-text mb-1.5'>
-									產品型錄連結：
+									附件連結：
 								</label>
 								<input
 									id='catalogLink'
@@ -344,7 +344,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									inputMode='url'
 									value={catalogLink}
 									onChange={(e) => setCatalogLink(e.target.value)}
-									placeholder='型錄 PDF 連結等'
+									placeholder='活動簡章、報名表或相關附件連結'
 									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 								/>
 							</div>
@@ -392,11 +392,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 								圖片尺寸比例為2:1，建議尺寸2000x1000，可新增多張並用「往前 / 往後」調整順序
 							</p>
 
-							<ImageSelectInput label='產品列表圖片：' value={listImage} onChange={setListImage} />
+							<ImageSelectInput label='活動列表圖片：' value={listImage} onChange={setListImage} />
 							<p className='text-xs text-text-light -mt-2'>圖片尺寸比例為2:1，建議尺寸960x480</p>
 
 							<div>
-								<label className='block text-sm font-medium text-text mb-1.5'>產品規格：</label>
+								<label className='block text-sm font-medium text-text mb-1.5'>活動資訊欄位：</label>
 								<div className='bg-surface rounded-lg border border-border p-4 space-y-3 mb-2'>
 									{specs.map((spec, index) => (
 										<div key={index} className='flex gap-2 items-start'>
@@ -408,7 +408,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 													newSpecs[index].label = e.target.value;
 													setSpecs(newSpecs);
 												}}
-												placeholder='名稱 (例如: 尺寸)'
+												placeholder='名稱 (例如: 活動時間)'
 												className='flex-1 px-3 py-2 text-sm bg-card rounded-md border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200'
 											/>
 											<input
@@ -419,7 +419,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 													newSpecs[index].value = e.target.value;
 													setSpecs(newSpecs);
 												}}
-												placeholder='數值 (例如: 100cm)'
+												placeholder='內容 (例如: 4/20 14:00-16:00)'
 												className='flex-1 px-3 py-2 text-sm bg-card rounded-md border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200'
 											/>
 											<button
@@ -466,14 +466,14 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 												d='M12 4.5v15m7.5-7.5h-15'
 											/>
 										</svg>
-										新增產品規格
+										新增欄位
 									</button>
 								</div>
 							</div>
 
 							<div>
 								<label htmlFor='category' className='block text-sm font-medium text-text mb-1.5'>
-									產品主分類：
+									活動主分類：
 								</label>
 								<select
 									id='category'
@@ -497,7 +497,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									htmlFor='subcategoryId'
 									className='block text-sm font-medium text-text mb-1.5'
 								>
-									產品子分類：
+									活動子分類：
 								</label>
 								<select
 									id='subcategoryId'
@@ -543,13 +543,13 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									htmlFor='isFeatured'
 									className='text-sm font-medium text-text cursor-pointer'
 								>
-									強檔產品
+									精選活動
 								</label>
 							</div>
 
 							<div>
 								<label htmlFor='description' className='block text-sm font-medium text-text mb-1.5'>
-									產品說明：
+									活動摘要：
 								</label>
 								<textarea
 									id='description'
@@ -563,11 +563,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 					</div>
 
 					<div>
-						<label className='block text-sm font-medium text-text mb-1.5'>產品介紹：</label>
+						<label className='block text-sm font-medium text-text mb-1.5'>活動內容：</label>
 						<BlockNoteEditor
 							initialHTML={initialHTML}
 							onChange={setContent}
-							placeholder='輸入產品詳細介紹、規格說明等...'
+							placeholder='輸入活動詳情、流程說明與報名資訊...'
 						/>
 					</div>
 

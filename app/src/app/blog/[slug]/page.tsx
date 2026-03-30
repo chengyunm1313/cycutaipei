@@ -219,7 +219,7 @@ export default function BlogPostPage({ params }: PageProps) {
 						dateModified: article.updatedAt,
 						publisher: {
 							'@type': 'Organization',
-							name: '產品型錄平台',
+							name: '中原大學台北市校友會',
 						},
 					}),
 				}}

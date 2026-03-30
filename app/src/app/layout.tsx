@@ -19,14 +19,14 @@ const notoSansTC = Noto_Sans_TC({
 
 const defaultMetadata: Metadata = {
 	title: {
-		default: '產品型錄平台 | 專業工業產品目錄',
-		template: '%s | 產品型錄平台',
+		default: '中原大學台北市校友會 | 校友交流與活動平台',
+		template: '%s | 中原大學台北市校友會',
 	},
-	description: '提供最完整的工業產品型錄，涵蓋電子零件、機械設備、測量儀器與包裝材料。',
-	keywords: ['產品型錄', '工業產品', '電子零件', '機械設備', '測量儀器'],
+	description: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
+	keywords: ['中原大學', '台北市校友會', '校友活動', '最新消息', '校友服務'],
 	openGraph: {
-		title: '產品型錄平台',
-		description: '提供最完整的工業產品型錄',
+		title: '中原大學台北市校友會',
+		description: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
 		type: 'website',
 		locale: 'zh_TW',
 	},
@@ -35,17 +35,17 @@ const defaultMetadata: Metadata = {
 export async function generateMetadata(): Promise<Metadata> {
 	try {
 		const settings = await fetchSiteSettings();
-		const siteName = settings.siteName?.trim() || '產品型錄平台';
-		const title = settings.siteTitle?.trim() || `${siteName} | 專業工業產品目錄`;
+		const siteName = settings.siteName?.trim() || '中原大學台北市校友會';
+		const title = settings.siteTitle?.trim() || `${siteName} | 校友交流與活動平台`;
 		const description =
 			settings.metaDescription?.trim() ||
-			'提供最完整的工業產品型錄，涵蓋電子零件、機械設備、測量儀器與包裝材料。';
+			'串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。';
 		const keywords = settings.metaKeywords
 			? settings.metaKeywords
 					.split(',')
 					.map((item) => item.trim())
 					.filter(Boolean)
-			: ['產品型錄', '工業產品', '電子零件', '機械設備', '測量儀器'];
+			: ['中原大學', '台北市校友會', '校友活動', '最新消息', '校友服務'];
 
 		return {
 			title: {
@@ -73,7 +73,7 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	let initialSiteName = '產品型錄平台';
+	let initialSiteName = '中原大學台北市校友會';
 
 	try {
 		const settings = await fetchSiteSettings();

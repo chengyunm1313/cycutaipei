@@ -79,7 +79,7 @@ export default function NewProductPage() {
 
 		const normalizedCatalogLink = normalizeOptionalHttpUrl(catalogLink);
 		if (catalogLink.trim() && !normalizedCatalogLink) {
-			setError('產品型錄連結格式不正確，請輸入完整網址或站內路徑（例如 /catalog.pdf）');
+			setError('附件連結格式不正確，請輸入完整網址或站內路徑（例如 /files/activity-guide.pdf）');
 			return;
 		}
 
@@ -151,14 +151,14 @@ export default function NewProductPage() {
 
 					<div>
 						<label htmlFor='name' className='block text-sm font-medium text-text mb-1.5'>
-							產品名稱 <span className='text-error'>*</span>
+							活動名稱 <span className='text-error'>*</span>
 						</label>
 						<input
 							id='name'
 							type='text'
 							value={name}
 							onChange={(e) => handleNameChange(e.target.value)}
-							placeholder='例：高效能微控制器 MCU-3200'
+							placeholder='例：四月校友聯誼講座'
 							required
 							className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 						/>
@@ -182,13 +182,13 @@ export default function NewProductPage() {
 
 					<div>
 						<label htmlFor='description' className='block text-sm font-medium text-text mb-1.5'>
-							產品說明：
+							活動摘要：
 						</label>
 						<textarea
 							id='description'
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
-							placeholder='簡要描述產品特色...'
+							placeholder='簡要說明活動亮點、對象與內容...'
 							rows={4}
 							className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 resize-none'
 						/>
@@ -204,7 +204,7 @@ export default function NewProductPage() {
 								type='number'
 								value={price}
 								onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
-								placeholder='填寫價錢 (產品付款時實際支出的金額)'
+								placeholder='可填寫報名費、餐費或留空'
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 							/>
 						</div>
@@ -237,7 +237,7 @@ export default function NewProductPage() {
 						</div>
 						<div className='col-span-2 sm:col-span-1'>
 							<label htmlFor='catalogLink' className='block text-sm font-medium text-text mb-1.5'>
-								產品型錄連結：
+								附件連結：
 							</label>
 							<input
 								id='catalogLink'
@@ -245,7 +245,7 @@ export default function NewProductPage() {
 								inputMode='url'
 								value={catalogLink}
 								onChange={(e) => setCatalogLink(e.target.value)}
-								placeholder='型錄 PDF 連結等'
+								placeholder='活動簡章、報名表或相關附件連結'
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 							/>
 						</div>
@@ -290,11 +290,11 @@ export default function NewProductPage() {
 								圖片尺寸比例為2:1，建議尺寸2000x1000，可新增多張並用「往前 / 往後」調整順序
 							</p>
 
-							<ImageSelectInput label='產品列表圖片：' value={listImage} onChange={setListImage} />
+							<ImageSelectInput label='活動列表圖片：' value={listImage} onChange={setListImage} />
 							<p className='text-xs text-text-light -mt-2'>圖片尺寸比例為2:1，建議尺寸960x480</p>
 
 							<div>
-								<label className='block text-sm font-medium text-text mb-1.5'>產品規格：</label>
+								<label className='block text-sm font-medium text-text mb-1.5'>活動資訊欄位：</label>
 								<div className='bg-surface rounded-lg border border-border p-4 space-y-3 mb-2'>
 									{specs.map((spec, index) => (
 										<div key={index} className='flex gap-2 items-start'>
@@ -306,7 +306,7 @@ export default function NewProductPage() {
 													newSpecs[index].label = e.target.value;
 													setSpecs(newSpecs);
 												}}
-												placeholder='名稱 (例如: 尺寸)'
+												placeholder='名稱 (例如: 活動時間)'
 												className='flex-1 px-3 py-2 text-sm bg-card rounded-md border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200'
 											/>
 											<input
@@ -317,7 +317,7 @@ export default function NewProductPage() {
 													newSpecs[index].value = e.target.value;
 													setSpecs(newSpecs);
 												}}
-												placeholder='數值 (例如: 100cm)'
+												placeholder='內容 (例如: 4/20 14:00-16:00)'
 												className='flex-1 px-3 py-2 text-sm bg-card rounded-md border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200'
 											/>
 											<button
@@ -364,7 +364,7 @@ export default function NewProductPage() {
 												d='M12 4.5v15m7.5-7.5h-15'
 											/>
 										</svg>
-										新增產品規格
+										新增欄位
 									</button>
 								</div>
 							</div>
@@ -373,7 +373,7 @@ export default function NewProductPage() {
 						<div className='col-span-2 sm:col-span-1 space-y-4'>
 							<div>
 								<label htmlFor='category' className='block text-sm font-medium text-text mb-1.5'>
-									產品主分類：
+									活動主分類：
 								</label>
 								<select
 									id='category'
@@ -397,7 +397,7 @@ export default function NewProductPage() {
 									htmlFor='subcategoryId'
 									className='block text-sm font-medium text-text mb-1.5'
 								>
-									產品子分類：
+									活動子分類：
 								</label>
 								<select
 									id='subcategoryId'
@@ -443,14 +443,14 @@ export default function NewProductPage() {
 									htmlFor='isFeatured'
 									className='text-sm font-medium text-text cursor-pointer'
 								>
-									強檔產品
+									精選活動
 								</label>
 							</div>
 						</div>
 					</div>
 
 					<div>
-						<label className='block text-sm font-medium text-text mb-1.5'>產品介紹：</label>
+						<label className='block text-sm font-medium text-text mb-1.5'>活動內容：</label>
 						<BlockNoteEditor initialHTML='' onChange={setContent} />
 					</div>
 
@@ -460,7 +460,7 @@ export default function NewProductPage() {
 							disabled={submitting}
 							className='px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
 						>
-							{submitting ? '新增中...' : '新增產品'}
+							{submitting ? '新增中...' : '新增活動資訊'}
 						</button>
 						<AppLink
 							href='/admin/products'

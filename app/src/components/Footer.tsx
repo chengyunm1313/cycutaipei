@@ -20,8 +20,8 @@ function isExternalUrl(url: string): boolean {
  * 包含公司資訊、快速連結、分類連結、聯絡方式
  */
 export default async function Footer() {
-	let siteName = '產品型錄平台';
-	let siteDescription = '提供最完整的工業產品型錄，涵蓋電子零件、機械設備、測量儀器與包裝材料。';
+	let siteName = '中原大學台北市校友會';
+	let siteDescription = '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。';
 	let bottomMenus: ApiMenu[] = [];
 	let productCategories: ApiCategory[] = [];
 	let contactPhone = '';

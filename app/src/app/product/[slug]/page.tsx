@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: PageProps) {
 			image: images,
 			brand: {
 				'@type': 'Organization',
-				name: '產品型錄平台',
+				name: '中原大學台北市校友會',
 			},
 		};
 
@@ -207,7 +207,7 @@ export default async function ProductPage({ params }: PageProps) {
 											d='M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'
 										/>
 									</svg>
-									洽詢此產品
+									洽詢活動資訊
 								</a>
 								{product.catalogLink && (
 									<a
@@ -229,16 +229,16 @@ export default async function ProductPage({ params }: PageProps) {
 												d='M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3'
 											></path>
 										</svg>
-										下載產品型錄
+										下載活動附件
 									</a>
 								)}
 							</div>
 						</div>
 					</div>
 
-					{/* 產品描述 */}
+					{/* 活動內容 */}
 					<div className='mb-16'>
-						<h2 className='text-xl font-bold text-text mb-4'>產品說明</h2>
+						<h2 className='text-xl font-bold text-text mb-4'>活動內容</h2>
 						{product.introVideoUrl && (
 							<div className='mb-8 aspect-video rounded-2xl overflow-hidden border border-border'>
 								<iframe
@@ -260,10 +260,10 @@ export default async function ProductPage({ params }: PageProps) {
 						/>
 					</div>
 
-					{/* 相關產品 */}
+					{/* 相關活動 */}
 					{relatedProducts.length > 0 && (
 						<div>
-							<h2 className='text-xl font-bold text-text mb-6'>相關產品</h2>
+							<h2 className='text-xl font-bold text-text mb-6'>相關活動</h2>
 							<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
 								{relatedProducts.map((p: ApiProduct) => (
 									<ProductCard key={p.id} product={p} categoryName={category?.name} />

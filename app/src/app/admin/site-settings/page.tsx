@@ -29,15 +29,15 @@ interface SiteSettingsFormState {
 }
 
 const defaultFormState: SiteSettingsFormState = {
-	siteName: '產品型錄平台',
-	siteTitle: '產品型錄平台 | 專業工業產品目錄',
+	siteName: '中原大學台北市校友會',
+	siteTitle: '中原大學台北市校友會 | 校友交流與活動平台',
 	logoUrl: '',
 	footerLogoUrl: '',
 	faviconUrl: '',
 	socialShareImageUrl: '',
-	metaDescription: '提供最完整的工業產品型錄，涵蓋電子零件、機械設備、測量儀器與包裝材料。',
-	metaKeywords: '產品型錄,工業產品,電子零件,機械設備,測量儀器',
-	contactLink: 'mailto:contact@example.com',
+	metaDescription: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
+	metaKeywords: '中原大學,台北市校友會,校友活動,最新消息,校友服務',
+	contactLink: 'https://www.facebook.com/TaiBeiShiSiLiZhongYuanDaXueXiaoYouHui?locale=zh_TW',
 	taxId: '',
 	phone: '',
 	fax: '',
@@ -216,7 +216,7 @@ export default function AdminSiteSettingsPage() {
 							value={form.siteTitle}
 							onChange={(event) => setForm((prev) => ({ ...prev, siteTitle: event.target.value }))}
 							className='w-full px-4 py-2 text-base rounded-xl border border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors'
-							placeholder='例如：產品型錄平台 | 專業工業產品目錄'
+							placeholder='例如：中原大學台北市校友會 | 校友交流與活動平台'
 						/>
 					</div>
 				</div>
@@ -396,7 +396,7 @@ export default function AdminSiteSettingsPage() {
 							value={form.copyright}
 							onChange={(event) => setForm((prev) => ({ ...prev, copyright: event.target.value }))}
 							className='w-full px-4 py-2 text-base rounded-xl border border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors'
-							placeholder='例如：© Copyright 2024 產品型錄平台, Inc. All rights reserved.'
+							placeholder='例如：© 2026 中原大學台北市校友會. All rights reserved.'
 						/>
 					</div>
 
@@ -507,7 +507,7 @@ export default function AdminSiteSettingsPage() {
 								setForm((prev) => ({ ...prev, metaKeywords: event.target.value }))
 							}
 							className='w-full px-4 py-2 text-base rounded-xl border border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors'
-							placeholder='請使用逗號分隔，例如：產品型錄,工業產品,機械設備'
+							placeholder='請使用逗號分隔，例如：中原大學,台北市校友會,校友活動'
 						/>
 					</div>
 				</div>

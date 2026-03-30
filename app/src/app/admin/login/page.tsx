@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
 						</svg>
 					</div>
 					<h1 className='text-xl font-bold text-text'>CMS 管理後台</h1>
-					<p className='text-sm text-text-muted mt-1'>請登入以管理產品型錄</p>
+					<p className='text-sm text-text-muted mt-1'>請登入以管理最新消息與活動資訊</p>
 				</div>
 
 				{/* 表單 */}
