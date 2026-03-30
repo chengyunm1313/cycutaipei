@@ -15,7 +15,7 @@ const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrappe
 });
 
 /**
- * 後台 - 新增產品
+ * 後台 - 新增活動資訊
  * 表單送出至 D1 API
  */
 export default function NewProductPage() {
@@ -67,7 +67,7 @@ export default function NewProductPage() {
 		setError('');
 
 		if (!name || !slug) {
-			setError('請填寫產品名稱與 Slug');
+			setError('請填寫活動資訊名稱與 Slug');
 			return;
 		}
 
@@ -110,7 +110,7 @@ export default function NewProductPage() {
 				sortOrder,
 				content: content || null,
 			});
-			alert('產品已新增！');
+			alert('活動資訊已新增！');
 			router.push(`/admin/products/${product.id}`);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : '新增失敗');
@@ -140,7 +140,7 @@ export default function NewProductPage() {
 						/>
 					</svg>
 				</AppLink>
-				<h1 className='text-2xl font-bold text-text'>新增產品</h1>
+				<h1 className='text-2xl font-bold text-text'>新增活動資訊</h1>
 			</div>
 
 			<div className='bg-card rounded-xl border border-border p-6'>

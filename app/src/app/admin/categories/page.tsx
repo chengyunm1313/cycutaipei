@@ -143,7 +143,7 @@ export default function AdminCategoriesPage() {
 			<div className='flex items-center justify-between mb-6'>
 				<div>
 					<h1 className='text-2xl font-bold text-text'>分類管理</h1>
-					<p className='text-text-muted text-sm mt-1'>管理產品分類</p>
+					<p className='text-text-muted text-sm mt-1'>管理活動資訊分類</p>
 				</div>
 				<AppLink
 					href='/admin/categories/new'

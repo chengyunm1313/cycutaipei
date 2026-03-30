@@ -34,7 +34,7 @@ function normalizeSortOrder(list: EditableCategory[]): EditableCategory[] {
 }
 
 /**
- * 後台 - 文章分類管理
+ * 後台 - 最新消息分類管理
  * 參考舊版 CMS 操作流程，支援新增、排序、開關、刪除
  */
 export default function AdminArticleCategoriesPage() {
@@ -59,7 +59,7 @@ export default function AdminArticleCategoriesPage() {
 			setItems(normalizeSortOrder(mapped));
 		} catch (error) {
 			console.error(error);
-			alert('載入文章分類失敗');
+			alert('載入最新消息分類失敗');
 		} finally {
 			setLoading(false);
 		}
@@ -133,7 +133,7 @@ export default function AdminArticleCategoriesPage() {
 			}
 
 			await loadData();
-			alert('文章分類已儲存');
+			alert('最新消息分類已儲存');
 		} catch (error) {
 			console.error(error);
 			alert(error instanceof Error ? error.message : '儲存失敗');
@@ -154,8 +154,8 @@ export default function AdminArticleCategoriesPage() {
 		<div>
 			<div className='flex flex-wrap items-end justify-between gap-3 mb-6'>
 				<div>
-					<h1 className='text-2xl font-bold text-text'>文章管理 - 分類管理</h1>
-					<p className='text-text-muted text-sm mt-1'>管理文章分類、排序與顯示狀態</p>
+					<h1 className='text-2xl font-bold text-text'>最新消息管理 - 分類管理</h1>
+					<p className='text-text-muted text-sm mt-1'>管理最新消息分類、排序與顯示狀態</p>
 				</div>
 				<div className='flex items-center gap-2'>
 					<button
@@ -175,7 +175,7 @@ export default function AdminArticleCategoriesPage() {
 			</div>
 
 			<div className='bg-card rounded-xl border border-border overflow-hidden'>
-				<div className='bg-text px-5 py-3 text-white text-sm font-semibold'>文章分類清單</div>
+				<div className='bg-text px-5 py-3 text-white text-sm font-semibold'>最新消息分類清單</div>
 				<div className='p-5 border-b border-border text-xs text-text-light'>
 					提示：排序數字越大會排越前，建議先用上下箭頭調整順序後再儲存。
 				</div>
@@ -204,7 +204,7 @@ export default function AdminArticleCategoriesPage() {
 							{items.length === 0 ? (
 								<tr>
 									<td colSpan={5} className='px-5 py-12 text-center text-sm text-text-light'>
-										目前沒有文章分類，請先新增。
+										目前沒有最新消息分類，請先新增。
 									</td>
 								</tr>
 							) : (

@@ -70,8 +70,8 @@ export default async function Footer() {
 				}))
 			: [
 					{ id: 'home', title: '首頁', href: '/', target: '_self' },
-					{ id: 'products', title: '全部產品', href: '/products', target: '_self' },
-					{ id: 'blog', title: '部落格', href: '/blog', target: '_self' },
+					{ id: 'products', title: '活動資訊', href: '/products', target: '_self' },
+					{ id: 'blog', title: '最新消息', href: '/blog', target: '_self' },
 				];
 
 	return (
@@ -130,9 +130,9 @@ export default async function Footer() {
 						</ul>
 					</div>
 
-					{/* 產品分類 */}
+					{/* 活動分類 */}
 					<div>
-						<h3 className='text-sm font-semibold uppercase tracking-wider mb-4'>產品分類</h3>
+						<h3 className='text-sm font-semibold uppercase tracking-wider mb-4'>活動分類</h3>
 						<ul className='space-y-2.5'>
 							{productCategories.length > 0 ? (
 								productCategories.map((cat) => (

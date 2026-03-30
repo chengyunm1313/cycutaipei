@@ -26,7 +26,7 @@ const BlockNoteEditor = dynamic<{
 const DRAFT_KEY = 'article_draft_autosave';
 
 /**
- * 後台 - 新增文章頁面
+ * 後台 - 新增最新消息頁面
  * 沉浸式寫作介面，左側主編輯區 + 右側設定面板
  */
 export default function NewArticlePage() {
@@ -124,7 +124,7 @@ export default function NewArticlePage() {
 
 	const handleSave = async (status: 'published' | 'draft') => {
 		if (!title.trim()) {
-			alert('請輸入文章標題');
+			alert('請輸入最新消息標題');
 			return;
 		}
 		const articleData = {
@@ -143,10 +143,10 @@ export default function NewArticlePage() {
 			const newArticle = await createArticle(articleData);
 			// 清除自動儲存
 			localStorage.removeItem(DRAFT_KEY);
-			alert(`文章已${status === 'published' ? '發佈' : '儲存為草稿'}！`);
+			alert(`最新消息已${status === 'published' ? '發佈' : '儲存為草稿'}！`);
 			router.push(`/admin/articles/${newArticle.id}`);
 		} catch (err) {
-			console.error('儲存文章失敗：', err);
+			console.error('儲存最新消息失敗：', err);
 			alert('儲存失敗，請稍後再試');
 		}
 	};
@@ -190,7 +190,7 @@ export default function NewArticlePage() {
 							/>
 						</svg>
 					</AppLink>
-					<h1 className='text-lg font-bold text-text'>新增文章</h1>
+					<h1 className='text-lg font-bold text-text'>新增最新消息</h1>
 					{lastSaved && (
 						<span className='text-xs text-text-light flex items-center gap-1'>
 							<svg
@@ -234,7 +234,7 @@ export default function NewArticlePage() {
 						onClick={() => handleSave('published')}
 						className='px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer'
 					>
-						發佈文章
+						發佈最新消息
 					</button>
 				</div>
 			</div>
@@ -249,7 +249,7 @@ export default function NewArticlePage() {
 							type='text'
 							value={title}
 							onChange={(e) => handleTitleChange(e.target.value)}
-							placeholder='輸入文章標題...'
+							placeholder='輸入最新消息標題...'
 							className='w-full text-3xl font-bold text-text bg-transparent outline-none border-none placeholder:text-text-light/40 mb-2'
 						/>
 						{slug && <p className='text-xs text-text-light font-mono mb-6'>/blog/{slug}</p>}

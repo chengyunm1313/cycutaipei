@@ -51,7 +51,7 @@ const sidebarItemsBase: SidebarItem[] = [
 		),
 	},
 	{
-		label: '產品管理',
+		label: '活動資訊管理',
 		permission: 'products',
 		icon: (
 			<svg
@@ -70,11 +70,11 @@ const sidebarItemsBase: SidebarItem[] = [
 		),
 		subItems: [
 			{ label: '分類管理', href: '/admin/categories' },
-			{ label: '產品內容', href: '/admin/products' },
+			{ label: '活動資訊內容', href: '/admin/products' },
 		],
 	},
 	{
-		label: '文章管理',
+		label: '最新消息管理',
 		permission: 'articles',
 		icon: (
 			<svg
@@ -93,7 +93,7 @@ const sidebarItemsBase: SidebarItem[] = [
 		),
 		subItems: [
 			{ label: '分類管理', href: '/admin/articles/categories' },
-			{ label: '內容管理', href: '/admin/articles/content' },
+			{ label: '最新消息內容', href: '/admin/articles/content' },
 		],
 	},
 	{
@@ -190,8 +190,8 @@ function AdminContent({ children }: { children: ReactNode }) {
 		{ menuId: number; pageId: number | null; title: string }[]
 	>([]);
 	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
-		產品管理: false,
-		文章管理: false,
+		活動資訊管理: false,
+		最新消息管理: false,
 		網站管理: false,
 		'網站管理::導覽頁面': false,
 		'網站管理::關於我們': false,

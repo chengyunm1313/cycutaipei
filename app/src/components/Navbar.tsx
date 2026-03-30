@@ -25,7 +25,7 @@ const fallbackMenus: ApiMenu[] = [
 	},
 	{
 		id: -2,
-		title: '文章',
+		title: '最新消息',
 		url: '/blog',
 		type: 'link',
 		pageId: null,
@@ -40,7 +40,7 @@ const fallbackMenus: ApiMenu[] = [
 	},
 	{
 		id: -3,
-		title: '產品',
+		title: '活動資訊',
 		url: '/products',
 		type: 'link',
 		pageId: null,

@@ -8,7 +8,7 @@ import { AdminPagination, SortableHeader, type SortConfig } from '@/components/A
 import { getPrimaryImageUrl } from '@/lib/imageValue';
 
 /**
- * 後台 - 產品管理頁面
+ * 後台 - 活動資訊管理頁面
  * 從 D1 API 動態載入資料
  */
 export default function AdminProductsPage() {
@@ -94,8 +94,8 @@ export default function AdminProductsPage() {
 		<div>
 			<div className='flex items-center justify-between mb-6'>
 				<div>
-					<h1 className='text-2xl font-bold text-text'>產品管理</h1>
-					<p className='text-text-muted text-sm mt-1'>管理所有產品資料</p>
+					<h1 className='text-2xl font-bold text-text'>活動資訊管理</h1>
+					<p className='text-text-muted text-sm mt-1'>管理所有活動資訊資料</p>
 				</div>
 				<AppLink
 					href='/admin/products/new'
@@ -110,11 +110,11 @@ export default function AdminProductsPage() {
 					>
 						<path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
 					</svg>
-					新增產品
+					新增活動資訊
 				</AppLink>
 			</div>
 
-			{/* 產品表格 */}
+			{/* 活動資訊表格 */}
 			<div className='bg-card rounded-xl border border-border overflow-hidden'>
 				<div className='overflow-x-auto'>
 					<table className='w-full'>
@@ -124,7 +124,7 @@ export default function AdminProductsPage() {
 									<span className='sr-only'>圖片</span>
 								</th>
 								<SortableHeader<ApiProduct>
-									label='產品'
+									label='活動資訊'
 									sortKey='name'
 									sortConfig={sortConfig}
 									onSort={handleSort}
@@ -156,7 +156,7 @@ export default function AdminProductsPage() {
 							{paginatedProducts.length === 0 ? (
 								<tr>
 									<td colSpan={6} className='px-5 py-12 text-center text-text-light text-sm'>
-										沒有產品
+										沒有活動資訊
 									</td>
 								</tr>
 							) : (

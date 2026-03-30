@@ -83,7 +83,7 @@ export default function BlogPostPage({ params }: PageProps) {
 				<h1 className='text-2xl font-bold text-text mb-4'>文章不存在</h1>
 				<p className='text-text-muted mb-6'>{error || '找不到此文章'}</p>
 				<AppLink href='/blog' className='text-primary hover:underline'>
-					返回部落格
+					返回最新消息
 				</AppLink>
 			</div>
 		);
@@ -95,7 +95,7 @@ export default function BlogPostPage({ params }: PageProps) {
 
 	return (
 		<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-			<Breadcrumb items={[{ label: '部落格', href: '/blog' }, { label: article.title }]} />
+			<Breadcrumb items={[{ label: '最新消息', href: '/blog' }, { label: article.title }]} />
 
 			{/* 文章標頭 */}
 			<header className='mb-8'>
@@ -188,7 +188,7 @@ export default function BlogPostPage({ params }: PageProps) {
 							d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
 						/>
 					</svg>
-					返回部落格
+					返回最新消息
 				</AppLink>
 			</div>
 

@@ -32,10 +32,10 @@ export default function AdminDashboard() {
 	}, []);
 
 	const stats = [
-		{ label: '產品總數', value: counts.products, color: 'bg-primary' },
+		{ label: '活動資訊總數', value: counts.products, color: 'bg-primary' },
 		{ label: '已上架', value: counts.published, color: 'bg-success' },
-		{ label: '產品分類', value: counts.categories, color: 'bg-secondary' },
-		{ label: '文章數量', value: counts.articles, color: 'bg-cta' },
+		{ label: '活動分類', value: counts.categories, color: 'bg-secondary' },
+		{ label: '最新消息數量', value: counts.articles, color: 'bg-cta' },
 	];
 
 	const recentActions = [{ action: '系統', target: '資料已從 D1 載入', time: '剛剛' }];
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
 		<div>
 			<div className='mb-8'>
 				<h1 className='text-2xl font-bold text-text'>Dashboard</h1>
-				<p className='text-text-muted mt-1'>管理您的產品型錄</p>
+				<p className='text-text-muted mt-1'>管理您的最新消息與活動資訊</p>
 			</div>
 
 			{/* 統計卡片 */}
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 									<path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
 								</svg>
 							</div>
-							<span className='text-sm font-medium text-text'>新增產品</span>
+							<span className='text-sm font-medium text-text'>新增活動資訊</span>
 						</AppLink>
 						<AppLink
 							href='/admin/articles/new'
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 									<path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
 								</svg>
 							</div>
-							<span className='text-sm font-medium text-text'>新增文章</span>
+							<span className='text-sm font-medium text-text'>新增最新消息</span>
 						</AppLink>
 						<AppLink
 							href='/admin/products'
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
 									/>
 								</svg>
 							</div>
-							<span className='text-sm font-medium text-text'>管理產品</span>
+							<span className='text-sm font-medium text-text'>管理活動資訊</span>
 						</AppLink>
 						<AppLink
 							href='/'

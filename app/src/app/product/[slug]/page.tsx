@@ -102,7 +102,7 @@ export default async function ProductPage({ params }: PageProps) {
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
 					<Breadcrumb
 						items={[
-							{ label: '全部產品', href: '/products' },
+							{ label: '活動資訊', href: '/products' },
 							...(category ? [{ label: category.name, href: `/category/${category.slug}` }] : []),
 							{ label: product.name },
 						]}

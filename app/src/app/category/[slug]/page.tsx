@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }: PageProps) {
 	if (!category) {
 		return (
 			<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
-				<Breadcrumb items={[{ label: '全部產品', href: '/products' }, { label: '分類未找到' }]} />
+				<Breadcrumb items={[{ label: '活動資訊', href: '/products' }, { label: '分類未找到' }]} />
 				<div className='mt-6 rounded-2xl border border-border bg-surface px-6 py-10 text-center'>
 					<h1 className='text-2xl font-bold text-text'>分類未找到</h1>
 					<p className='mt-3 text-text-muted'>此分類可能已下架或尚未建立。</p>
@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }: PageProps) {
 							href='/products'
 							className='inline-flex items-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark'
 						>
-							返回全部產品
+							返回活動資訊
 						</AppLink>
 					</div>
 				</div>
@@ -59,7 +59,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
 	const categoryPath = getCategoryPath(category.id, allCategories);
 	const breadcrumbItems = [
-		{ label: '全部產品', href: '/products' },
+		{ label: '活動資訊', href: '/products' },
 		...categoryPath.map((cat) => ({ label: cat.name, href: `/category/${cat.slug}` })),
 	];
 
@@ -71,10 +71,10 @@ export default async function CategoryPage({ params }: PageProps) {
 			<div className='mb-8'>
 				<h1 className='text-2xl sm:text-3xl font-bold text-text'>{category.name}</h1>
 				<p className='text-text-muted mt-2'>{category.description}</p>
-				<p className='text-sm text-text-light mt-1'>共 {categoryProducts.length} 項產品</p>
+				<p className='text-sm text-text-light mt-1'>共 {categoryProducts.length} 筆活動資訊</p>
 			</div>
 
-			{/* 產品列表 */}
+			{/* 活動資訊列表 */}
 			{categoryProducts.length > 0 ? (
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
 					{categoryProducts.map((product) => (
@@ -96,8 +96,8 @@ export default async function CategoryPage({ params }: PageProps) {
 							d='M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
 						/>
 					</svg>
-					<h3 className='text-lg font-semibold text-text mb-1'>此分類尚無產品</h3>
-					<p className='text-text-muted'>敬請期待更多產品上架</p>
+					<h3 className='text-lg font-semibold text-text mb-1'>此分類尚無活動資訊</h3>
+					<p className='text-text-muted'>敬請期待更多活動更新</p>
 				</div>
 			)}
 		</div>

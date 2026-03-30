@@ -73,8 +73,8 @@ function ProductsContent() {
 		<>
 			{/* 標題 */}
 			<div className='mb-8'>
-				<h1 className='text-2xl sm:text-3xl font-bold text-text'>全部產品</h1>
-				<p className='text-text-muted mt-2'>共 {filteredProducts.length} 項產品</p>
+				<h1 className='text-2xl sm:text-3xl font-bold text-text'>活動資訊</h1>
+				<p className='text-text-muted mt-2'>共 {filteredProducts.length} 筆活動資訊</p>
 			</div>
 
 			{/* 篩選列 */}
@@ -83,7 +83,7 @@ function ProductsContent() {
 					<div className='relative'>
 						<input
 							type='text'
-							placeholder='搜尋產品...'
+							placeholder='搜尋活動資訊...'
 							value={query}
 							onChange={(e) => {
 								setQuery(e.target.value);
@@ -127,7 +127,7 @@ function ProductsContent() {
 						onChange={(e) => setSortBy(e.target.value as 'newest' | 'name')}
 						className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 cursor-pointer'
 					>
-						<option value='newest'>最新上架</option>
+						<option value='newest'>最新活動</option>
 						<option value='name'>名稱排序</option>
 					</select>
 				</div>
@@ -149,7 +149,7 @@ function ProductsContent() {
 				)}
 			</div>
 
-			{/* 產品 Grid */}
+			{/* 活動資訊 Grid */}
 			{pagedProducts.length > 0 ? (
 				<>
 					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
@@ -182,7 +182,7 @@ function ProductsContent() {
 							d='M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
 						/>
 					</svg>
-					<h3 className='text-lg font-semibold text-text mb-1'>找不到符合條件的產品</h3>
+					<h3 className='text-lg font-semibold text-text mb-1'>找不到符合條件的活動資訊</h3>
 					<p className='text-text-muted'>請嘗試調整篩選條件或搜尋關鍵字</p>
 				</div>
 			)}
@@ -191,13 +191,13 @@ function ProductsContent() {
 }
 
 /**
- * 產品列表頁
+ * 活動資訊列表頁
  * 使用 Suspense 包裝 useSearchParams
  */
 export default function ProductsPage() {
 	return (
 		<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-			<Breadcrumb items={[{ label: '全部產品' }]} />
+			<Breadcrumb items={[{ label: '活動資訊' }]} />
 			<Suspense
 				fallback={
 					<div className='text-center py-20'>

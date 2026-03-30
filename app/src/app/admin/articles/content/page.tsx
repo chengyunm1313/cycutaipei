@@ -9,8 +9,8 @@ import { AdminPagination, SortableHeader, type SortConfig } from '@/components/A
 type TabFilter = 'all' | 'published' | 'draft';
 
 /**
- * 後台 - 文章內容管理列表
- * 排版對齊產品管理操作節奏，強化篩選與可讀性
+ * 後台 - 最新消息內容管理列表
+ * 排版對齊活動資訊管理操作節奏，強化篩選與可讀性
  */
 export default function AdminArticlesContentPage() {
 	const [tab, setTab] = useState<TabFilter>('all');
@@ -106,8 +106,8 @@ export default function AdminArticlesContentPage() {
 		<div>
 			<div className='flex items-center justify-between mb-6'>
 				<div>
-					<h1 className='text-2xl font-bold text-text'>文章管理 - 內容管理</h1>
-					<p className='text-text-muted text-sm mt-1'>以表格方式維護文章內容與發佈狀態</p>
+					<h1 className='text-2xl font-bold text-text'>最新消息管理 - 內容管理</h1>
+					<p className='text-text-muted text-sm mt-1'>以表格方式維護最新消息內容與發佈狀態</p>
 				</div>
 				<AppLink
 					href='/admin/articles/new'
@@ -122,7 +122,7 @@ export default function AdminArticlesContentPage() {
 					>
 						<path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
 					</svg>
-					新增文章
+					新增最新消息
 				</AppLink>
 			</div>
 
@@ -188,7 +188,7 @@ export default function AdminArticlesContentPage() {
 						type='text'
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
-						placeholder='搜尋文章標題 / 作者 / 分類...'
+						placeholder='搜尋最新消息標題 / 作者 / 分類...'
 						className='w-full pl-9 pr-4 py-2 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 					/>
 				</div>
@@ -200,7 +200,7 @@ export default function AdminArticlesContentPage() {
 						<thead>
 							<tr className='bg-surface-alt'>
 								<SortableHeader<ApiArticle>
-									label='文章標題'
+									label='最新消息標題'
 									sortKey='title'
 									sortConfig={sortConfig}
 									onSort={handleSort}
