@@ -11,6 +11,7 @@ import { createAcademyCourse, fetchAcademyCategories } from '@/lib/api';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { normalizeYouTubeUrl } from '@/lib/youtube';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -40,18 +41,10 @@ export default function NewAcademyCoursePage() {
 		fetchAcademyCategories().then(setCategories).catch(console.error);
 	}, []);
 
-	const generateSlug = (text: string) =>
-		text
-			.toLowerCase()
-			.replace(/[^\w\u4e00-\u9fff\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/-+/g, '-')
-			.trim();
-
 	const handleTitleChange = (value: string) => {
 		setTitle(value);
-		if (!slug || slug === generateSlug(title)) {
-			setSlug(generateSlug(value));
+		if (!slug || slug === slugifyAscii(title, 'academy-course')) {
+			setSlug(slugifyAscii(value, 'academy-course'));
 		}
 	};
 
@@ -82,7 +75,7 @@ export default function NewAcademyCoursePage() {
 		try {
 			const course = await createAcademyCourse({
 				title,
-				slug,
+				slug: slugifyAscii(slug, 'academy-course'),
 				excerpt: excerpt || null,
 				content: content || null,
 				categoryId: categoryId === '' ? null : categoryId,
@@ -146,10 +139,13 @@ export default function NewAcademyCoursePage() {
 							id='slug'
 							type='text'
 							value={slug}
-							onChange={(event) => setSlug(event.target.value)}
+							onChange={(event) => setSlug(slugifyAscii(event.target.value, 'academy-course'))}
 							required
 							className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 						/>
+						<p className='mt-1 text-xs text-text-light'>
+							課程網址會自動限制為英數與連字號，避免前台課程頁 404。
+						</p>
 					</div>
 
 					<div>

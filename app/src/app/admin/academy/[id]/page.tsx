@@ -18,6 +18,7 @@ import {
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { normalizeYouTubeUrl } from '@/lib/youtube';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -57,7 +58,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 		Promise.all([fetchAcademyCourse(courseId), fetchAcademyCategories()])
 			.then(([course, categoryList]) => {
 				setTitle(course.title);
-				setSlug(course.slug);
+				setSlug(slugifyAscii(course.slug, 'academy-course'));
 				setExcerpt(course.excerpt || '');
 				setContent(course.content || '');
 				setCategoryId(course.categoryId ?? '');
@@ -106,7 +107,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 		try {
 			await updateAcademyCourse(courseId, {
 				title,
-				slug,
+				slug: slugifyAscii(slug, 'academy-course'),
 				excerpt: excerpt || null,
 				content: content || null,
 				categoryId: categoryId === '' ? null : categoryId,
@@ -197,10 +198,13 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 							id='slug'
 							type='text'
 							value={slug}
-							onChange={(event) => setSlug(event.target.value)}
+							onChange={(event) => setSlug(slugifyAscii(event.target.value, 'academy-course'))}
 							required
 							className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 						/>
+						<p className='mt-1 text-xs text-text-light'>
+							課程網址會自動限制為英數與連字號，避免前台課程頁 404。
+						</p>
 					</div>
 
 					<div>
