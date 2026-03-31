@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+import { asc, desc, eq } from 'drizzle-orm';
 import Breadcrumb from '@/components/Breadcrumb';
 import AppLink from '@/components/AppLink';
-import {
-	fetchAcademyCategories,
-	fetchAcademyCourseBySlug,
-	fetchAcademyCourses,
-} from '@/lib/api';
 import AcademyCourseCard from '@/components/AcademyCourseCard';
 import { resolveContentDate } from '@/lib/contentDate';
 import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 import { toYouTubeEmbedUrl } from '@/lib/youtube';
+import { getDb } from '@/db/client';
+import { academyCategories, academyCourses } from '@/db/schema';
+import type { ApiAcademyCategory, ApiAcademyCourse } from '@/data/types';
 
 export const runtime = 'edge';
 
@@ -18,10 +18,119 @@ interface PageProps {
 	params: Promise<{ slug: string }>;
 }
 
+interface AcademyCourseRow {
+	id: number;
+	title: string;
+	slug: string;
+	excerpt: string | null;
+	content: string | null;
+	categoryId: number | null;
+	youtubeUrl: string | null;
+	coverImage: string | null;
+	coverImagePositionY: number | null;
+	speaker: string | null;
+	resourceLink: string | null;
+	isFeatured?: boolean | number | null;
+	sortOrder: number | null;
+	status: string | null;
+	postDate: string | null;
+	createdAt: string | null;
+	updatedAt?: string | null;
+}
+
+interface AcademyCategoryRow {
+	id: number;
+	name: string;
+	slug: string;
+	description: string | null;
+	image: string | null;
+	sortOrder: number | null;
+	isActive?: boolean | number | null;
+	createdAt: string | null;
+}
+
+function normalizeAcademyCourseRow(course: AcademyCourseRow | null | undefined): ApiAcademyCourse | null {
+	if (!course) return null;
+	return {
+		id: course.id,
+		title: course.title,
+		slug: course.slug,
+		excerpt: course.excerpt,
+		content: course.content,
+		categoryId: course.categoryId,
+		youtubeUrl: course.youtubeUrl,
+		coverImage: course.coverImage,
+		coverImagePositionY: course.coverImagePositionY ?? 50,
+		speaker: course.speaker,
+		resourceLink: course.resourceLink,
+		isFeatured: course.isFeatured ?? false,
+		sortOrder: course.sortOrder ?? 0,
+		status: course.status ?? 'draft',
+		postDate: course.postDate,
+		createdAt: course.createdAt ?? '',
+		updatedAt: course.updatedAt ?? course.createdAt ?? '',
+	};
+}
+
+function normalizeAcademyCategoryRows(categories: AcademyCategoryRow[]): ApiAcademyCategory[] {
+	return categories.map((item) => ({
+		id: item.id,
+		name: item.name,
+		slug: item.slug,
+		description: item.description,
+		image: item.image,
+		sortOrder: item.sortOrder ?? 0,
+		isActive: item.isActive ?? false,
+		createdAt: item.createdAt ?? '',
+	}));
+}
+
+async function fetchAcademyPageData(slug: string): Promise<{
+	course: ApiAcademyCourse | null;
+	categories: ApiAcademyCategory[];
+	allCourses: ApiAcademyCourse[];
+}> {
+	const { env } = getRequestContext();
+	if (!env?.DB) {
+		console.error('Academy page DB not available');
+		return { course: null, categories: [], allCourses: [] };
+	}
+
+	const db = getDb(env.DB);
+	const [course, categories, publishedCourses] = await Promise.all([
+		db.select().from(academyCourses).where(eq(academyCourses.slug, slug)).get(),
+		db
+			.select()
+			.from(academyCategories)
+			.orderBy(asc(academyCategories.sortOrder), asc(academyCategories.createdAt))
+			.all(),
+		db
+			.select()
+			.from(academyCourses)
+			.orderBy(
+				asc(academyCourses.sortOrder),
+				desc(academyCourses.postDate),
+				desc(academyCourses.createdAt)
+			)
+			.all(),
+	]);
+
+	return {
+		course: normalizeAcademyCourseRow(course),
+		categories: normalizeAcademyCategoryRows(categories).filter((item) => Boolean(item.isActive)),
+		allCourses: publishedCourses
+			.map((item) => normalizeAcademyCourseRow(item))
+			.filter((item): item is ApiAcademyCourse => Boolean(item && item.status === 'published')),
+	};
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
 	const { slug } = await params;
 	try {
-		const course = await fetchAcademyCourseBySlug(slug);
+		const { course } = await fetchAcademyPageData(slug);
+		if (!course || course.status !== 'published') {
+			return { title: '課程未找到' };
+		}
 		return {
 			title: course.title,
 			description: course.excerpt?.replace(/<[^>]*>/g, '').substring(0, 160) || undefined,
@@ -35,11 +144,10 @@ export default async function AcademyCoursePage({ params }: PageProps) {
 	const { slug } = await params;
 
 	try {
-		const course = await fetchAcademyCourseBySlug(slug);
-		const [categories, allCourses] = await Promise.all([
-			fetchAcademyCategories(true),
-			fetchAcademyCourses({ status: 'published' }),
-		]);
+		const { course, categories, allCourses } = await fetchAcademyPageData(slug);
+		if (!course || course.status !== 'published') {
+			notFound();
+		}
 
 		const category = categories.find((item) => item.id === course.categoryId) || null;
 		const relatedCourses = allCourses.filter((item) => item.id !== course.id).slice(0, 3);
