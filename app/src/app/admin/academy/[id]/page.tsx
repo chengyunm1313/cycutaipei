@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import AppLink from '@/components/AppLink';
 import ImageSelectInput from '@/components/ImageSelectInput';
 import CoverImagePositionControl from '@/components/CoverImagePositionControl';
+import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import type { ApiAcademyCategory } from '@/data/types';
 import {
 	deleteAcademyCourseApi,
@@ -47,6 +48,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [submitting, setSubmitting] = useState(false);
+	const [submittingAction, setSubmittingAction] = useState<'published' | 'draft' | null>(null);
 
 	useEffect(() => {
 		if (Number.isNaN(courseId)) {
@@ -80,8 +82,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 			.finally(() => setLoading(false));
 	}, [courseId]);
 
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
+	const handleSave = async (nextStatus: 'published' | 'draft') => {
 		setError('');
 
 		if (!title || !slug) {
@@ -104,6 +105,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 		}
 
 		setSubmitting(true);
+		setSubmittingAction(nextStatus);
 		try {
 			await updateAcademyCourse(courseId, {
 				title,
@@ -116,17 +118,19 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 				coverImagePositionY,
 				speaker: speaker || null,
 				resourceLink: normalizedResourceLink,
-				status,
+				status: nextStatus,
 				isFeatured,
 				sortOrder,
 				postDate: postDate || null,
 			});
-			alert('課程已更新！');
+			setStatus(nextStatus);
+			alert(`課程已${nextStatus === 'published' ? '發布' : '儲存為草稿'}！`);
 			router.refresh();
 		} catch (err) {
 			setError(err instanceof Error ? err.message : '更新失敗');
 		} finally {
 			setSubmitting(false);
+			setSubmittingAction(null);
 		}
 	};
 
@@ -152,26 +156,28 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 
 	return (
 		<div className='max-w-2xl'>
-			<div className='flex items-center justify-between mb-6'>
-				<div className='flex items-center gap-3'>
-					<AppLink
-						href='/admin/academy'
-						className='p-2 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer'
+			<EditorPublishToolbar
+				backHref='/admin/academy'
+				title='編輯課程'
+				status={status}
+				onSaveDraft={() => void handleSave('draft')}
+				onPublish={() => void handleSave('published')}
+				isSubmitting={submitting}
+				submittingAction={submittingAction}
+				meta='狀態顯示集中在上方，避免編輯完內容卻忘記切成已發布。'
+				extraActions={
+					<button
+						type='button'
+						onClick={() => void handleDelete()}
+						className='inline-flex min-h-11 items-center justify-center rounded-xl border border-error/20 px-5 py-2.5 text-sm font-medium text-error transition-colors duration-200 hover:bg-error/10'
 					>
-						返回
-					</AppLink>
-					<h1 className='text-2xl font-bold text-text'>編輯課程</h1>
-				</div>
-				<button
-					onClick={() => void handleDelete()}
-					className='px-4 py-2 text-sm font-medium text-error hover:bg-error/10 border border-error/20 rounded-lg transition-colors duration-200 cursor-pointer'
-				>
-					刪除課程
-				</button>
-			</div>
+						刪除課程
+					</button>
+				}
+			/>
 
 			<div className='bg-card rounded-xl border border-border p-6'>
-				<form onSubmit={handleSubmit} className='space-y-5'>
+				<form onSubmit={(event) => event.preventDefault()} className='space-y-5'>
 					{error ? (
 						<div className='bg-error/10 text-error text-sm px-4 py-2.5 rounded-lg'>{error}</div>
 					) : null}
@@ -307,20 +313,6 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 
 					<div className='grid grid-cols-2 gap-4'>
 						<div className='col-span-2 sm:col-span-1'>
-							<label htmlFor='status' className='block text-sm font-medium text-text mb-1.5'>
-								狀態
-							</label>
-							<select
-								id='status'
-								value={status}
-								onChange={(event) => setStatus(event.target.value as 'published' | 'draft')}
-								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 cursor-pointer'
-							>
-								<option value='draft'>草稿</option>
-								<option value='published'>已發布</option>
-							</select>
-						</div>
-						<div className='col-span-2 sm:col-span-1'>
 							<label htmlFor='sortOrder' className='block text-sm font-medium text-text mb-1.5'>
 								排序
 							</label>
@@ -343,22 +335,6 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 						/>
 						<span className='text-sm text-text'>設為精選課程</span>
 					</label>
-
-					<div className='flex gap-3 pt-2'>
-						<button
-							type='submit'
-							disabled={submitting}
-							className='px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50'
-						>
-							{submitting ? '儲存中...' : '儲存變更'}
-						</button>
-						<AppLink
-							href='/admin/academy'
-							className='px-5 py-2.5 text-sm font-medium text-text-muted bg-surface border border-border rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer'
-						>
-							返回列表
-						</AppLink>
-					</div>
 				</form>
 			</div>
 		</div>

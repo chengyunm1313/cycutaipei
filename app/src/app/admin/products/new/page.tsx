@@ -8,6 +8,7 @@ import type { ApiCategory } from '@/data/types';
 import ImageSelectInput from '@/components/ImageSelectInput';
 import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import MultiImageSelectInput from '@/components/MultiImageSelectInput';
+import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import dynamic from 'next/dynamic';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
@@ -43,6 +44,7 @@ export default function NewProductPage() {
 	const [content, setContent] = useState('');
 	const [error, setError] = useState('');
 	const [submitting, setSubmitting] = useState(false);
+	const [submittingAction, setSubmittingAction] = useState<'published' | 'draft' | null>(null);
 	const [categories, setCategories] = useState<ApiCategory[]>([]);
 
 	useEffect(() => {
@@ -66,8 +68,7 @@ export default function NewProductPage() {
 			.trim();
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSave = async (nextStatus: 'published' | 'draft') => {
 		setError('');
 
 		if (!name || !slug) {
@@ -94,6 +95,7 @@ export default function NewProductPage() {
 		}
 
 		setSubmitting(true);
+		setSubmittingAction(nextStatus);
 		try {
 			const product = await createProduct({
 				name,
@@ -101,7 +103,7 @@ export default function NewProductPage() {
 				description: description || null,
 				categoryId: categoryId === '' ? null : categoryId,
 				subcategoryId: subcategoryId === '' ? null : subcategoryId,
-				status,
+				status: nextStatus,
 				images: carouselImages.length > 0 ? JSON.stringify(carouselImages) : null,
 				listImage: listImage || null,
 				coverImagePositionY,
@@ -116,41 +118,36 @@ export default function NewProductPage() {
 				postDate: postDate || null,
 				content: content || null,
 			});
-			alert('活動資訊已新增！');
+			setStatus(nextStatus);
+			alert(`活動資訊已${nextStatus === 'published' ? '發布' : '儲存為草稿'}！`);
 			router.push(`/admin/products/${product.id}`);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : '新增失敗');
 		} finally {
 			setSubmitting(false);
+			setSubmittingAction(null);
 		}
 	};
 
 	return (
 		<div className='max-w-2xl'>
-			<div className='flex items-center gap-3 mb-6'>
-				<AppLink
-					href='/admin/products'
-					className='p-2 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer'
-				>
-					<svg
-						className='w-5 h-5 text-text-muted'
-						fill='none'
-						viewBox='0 0 24 24'
-						strokeWidth={2}
-						stroke='currentColor'
-					>
-						<path
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
-						/>
-					</svg>
-				</AppLink>
-				<h1 className='text-2xl font-bold text-text'>新增活動資訊</h1>
-			</div>
+			<EditorPublishToolbar
+				backHref='/admin/products'
+				title='新增活動資訊'
+				status={status}
+				onSaveDraft={() => void handleSave('draft')}
+				onPublish={() => void handleSave('published')}
+				isSubmitting={submitting}
+				submittingAction={submittingAction}
+				meta='上方即可直接儲存草稿或發布，不必再往下捲找上架選項。'
+			/>
 
 			<div className='bg-card rounded-xl border border-border p-6'>
-				<form onSubmit={handleSubmit} noValidate className='space-y-5'>
+				<form
+					onSubmit={(event) => event.preventDefault()}
+					noValidate
+					className='space-y-5'
+				>
 					{error && (
 						<div className='bg-error/10 text-error text-sm px-4 py-2.5 rounded-lg'>{error}</div>
 					)}
@@ -440,21 +437,6 @@ export default function NewProductPage() {
 								</select>
 							</div>
 
-							<div>
-								<label htmlFor='status' className='block text-sm font-medium text-text mb-1.5'>
-									上架：
-								</label>
-								<select
-									id='status'
-									value={status}
-									onChange={(e) => setStatus(e.target.value as 'published' | 'draft')}
-									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 cursor-pointer'
-								>
-									<option value='draft'>草稿</option>
-									<option value='published'>已上架</option>
-								</select>
-							</div>
-
 							<div className='flex items-center gap-2 mt-2 pt-2 border-t border-border'>
 								<input
 									type='checkbox'
@@ -467,7 +449,7 @@ export default function NewProductPage() {
 									htmlFor='isFeatured'
 									className='text-sm font-medium text-text cursor-pointer'
 								>
-									精選活動
+									設為精選活動
 								</label>
 							</div>
 						</div>
@@ -476,22 +458,6 @@ export default function NewProductPage() {
 					<div>
 						<label className='block text-sm font-medium text-text mb-1.5'>活動內容：</label>
 						<BlockNoteEditor initialHTML='' onChange={setContent} />
-					</div>
-
-					<div className='flex gap-3 pt-2'>
-						<button
-							type='submit'
-							disabled={submitting}
-							className='px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
-						>
-							{submitting ? '新增中...' : '新增活動資訊'}
-						</button>
-						<AppLink
-							href='/admin/products'
-							className='px-5 py-2.5 text-sm font-medium text-text-muted bg-surface border border-border rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer'
-						>
-							取消
-						</AppLink>
 					</div>
 				</form>
 			</div>

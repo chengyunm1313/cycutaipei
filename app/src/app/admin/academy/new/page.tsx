@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import AppLink from '@/components/AppLink';
 import ImageSelectInput from '@/components/ImageSelectInput';
 import CoverImagePositionControl from '@/components/CoverImagePositionControl';
+import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import type { ApiAcademyCategory } from '@/data/types';
 import { createAcademyCourse, fetchAcademyCategories } from '@/lib/api';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
@@ -35,6 +36,7 @@ export default function NewAcademyCoursePage() {
 	const [postDate, setPostDate] = useState('');
 	const [error, setError] = useState('');
 	const [submitting, setSubmitting] = useState(false);
+	const [submittingAction, setSubmittingAction] = useState<'published' | 'draft' | null>(null);
 	const [categories, setCategories] = useState<ApiAcademyCategory[]>([]);
 
 	useEffect(() => {
@@ -48,8 +50,7 @@ export default function NewAcademyCoursePage() {
 		}
 	};
 
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
+	const handleSave = async (nextStatus: 'published' | 'draft') => {
 		setError('');
 
 		if (!title || !slug) {
@@ -72,6 +73,7 @@ export default function NewAcademyCoursePage() {
 		}
 
 		setSubmitting(true);
+		setSubmittingAction(nextStatus);
 		try {
 			const course = await createAcademyCourse({
 				title,
@@ -84,34 +86,37 @@ export default function NewAcademyCoursePage() {
 				coverImagePositionY,
 				speaker: speaker || null,
 				resourceLink: normalizedResourceLink,
-				status,
+				status: nextStatus,
 				isFeatured,
 				sortOrder,
 				postDate: postDate || null,
 			});
-			alert('課程已新增！');
+			setStatus(nextStatus);
+			alert(`課程已${nextStatus === 'published' ? '發布' : '儲存為草稿'}！`);
 			router.push(`/admin/academy/${course.id}`);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : '新增失敗');
 		} finally {
 			setSubmitting(false);
+			setSubmittingAction(null);
 		}
 	};
 
 	return (
 		<div className='max-w-2xl'>
-			<div className='flex items-center gap-3 mb-6'>
-				<AppLink
-					href='/admin/academy'
-					className='p-2 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer'
-				>
-					返回
-				</AppLink>
-				<h1 className='text-2xl font-bold text-text'>新增課程</h1>
-			</div>
+			<EditorPublishToolbar
+				backHref='/admin/academy'
+				title='新增課程'
+				status={status}
+				onSaveDraft={() => void handleSave('draft')}
+				onPublish={() => void handleSave('published')}
+				isSubmitting={submitting}
+				submittingAction={submittingAction}
+				meta='頂部可直接儲存草稿或發布，避免內容填完才發現漏選狀態。'
+			/>
 
 			<div className='bg-card rounded-xl border border-border p-6'>
-				<form onSubmit={handleSubmit} className='space-y-5'>
+				<form onSubmit={(event) => event.preventDefault()} className='space-y-5'>
 					{error ? (
 						<div className='bg-error/10 text-error text-sm px-4 py-2.5 rounded-lg'>{error}</div>
 					) : null}
@@ -252,20 +257,6 @@ export default function NewAcademyCoursePage() {
 
 					<div className='grid grid-cols-2 gap-4'>
 						<div className='col-span-2 sm:col-span-1'>
-							<label htmlFor='status' className='block text-sm font-medium text-text mb-1.5'>
-								狀態
-							</label>
-							<select
-								id='status'
-								value={status}
-								onChange={(event) => setStatus(event.target.value as 'published' | 'draft')}
-								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 cursor-pointer'
-							>
-								<option value='draft'>草稿</option>
-								<option value='published'>已發布</option>
-							</select>
-						</div>
-						<div className='col-span-2 sm:col-span-1'>
 							<label htmlFor='sortOrder' className='block text-sm font-medium text-text mb-1.5'>
 								排序
 							</label>
@@ -288,22 +279,6 @@ export default function NewAcademyCoursePage() {
 						/>
 						<span className='text-sm text-text'>設為精選課程</span>
 					</label>
-
-					<div className='flex gap-3 pt-2'>
-						<button
-							type='submit'
-							disabled={submitting}
-							className='px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50'
-						>
-							{submitting ? '新增中...' : '新增課程'}
-						</button>
-						<AppLink
-							href='/admin/academy'
-							className='px-5 py-2.5 text-sm font-medium text-text-muted bg-surface border border-border rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer'
-						>
-							取消
-						</AppLink>
-					</div>
 				</form>
 			</div>
 		</div>

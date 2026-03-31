@@ -10,6 +10,7 @@ import ImageSelectInput from '@/components/ImageSelectInput';
 import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import MultiImageSelectInput from '@/components/MultiImageSelectInput';
 import { useToast } from '@/components/ToastProvider';
+import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { parseImageValue } from '@/lib/imageValue';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
@@ -95,6 +96,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [submitting, setSubmitting] = useState(false);
+	const [submittingAction, setSubmittingAction] = useState<'published' | 'draft' | null>(null);
 	const [categories, setCategories] = useState<ApiCategory[]>([]);
 
 	// 暫存初始內容，用於 BlockNote 初始化
@@ -138,8 +140,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 			.finally(() => setLoading(false));
 	}, [productId]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSave = async (nextStatus: 'published' | 'draft') => {
 		setError('');
 
 		if (!name || !slug) {
@@ -173,6 +174,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 		}
 
 		setSubmitting(true);
+		setSubmittingAction(nextStatus);
 		try {
 			await updateProduct(productId, {
 				name,
@@ -182,7 +184,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				price: price === '' ? null : Number(price),
 				categoryId: categoryId === '' ? null : Number(categoryId),
 				subcategoryId: subcategoryId === '' ? null : Number(subcategoryId),
-				status,
+				status: nextStatus,
 				images: carouselImages.length > 0 ? JSON.stringify(carouselImages) : null,
 				listImage: listImage || null,
 				coverImagePositionY,
@@ -195,7 +197,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				sortOrder,
 				postDate: postDate || null,
 			});
-			showToast('活動資訊已更新！', 'success');
+			setStatus(nextStatus);
+			showToast(`活動資訊已${nextStatus === 'published' ? '發布' : '儲存為草稿'}！`, 'success');
 			// router.push('/admin/products'); // 移除自動跳轉
 			router.refresh();
 		} catch (err) {
@@ -204,6 +207,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 			showToast(msg, 'error');
 		} finally {
 			setSubmitting(false);
+			setSubmittingAction(null);
 		}
 	};
 
@@ -230,38 +234,32 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
 	return (
 		<div className='max-w-4xl'>
-			<div className='flex items-center justify-between mb-6'>
-				<div className='flex items-center gap-3'>
-					<AppLink
-						href='/admin/products'
-						className='p-2 rounded-lg hover:bg-surface transition-colors duration-200 cursor-pointer'
+			<EditorPublishToolbar
+				backHref='/admin/products'
+				title='編輯活動資訊'
+				status={status}
+				onSaveDraft={() => void handleSave('draft')}
+				onPublish={() => void handleSave('published')}
+				isSubmitting={submitting}
+				submittingAction={submittingAction}
+				meta='發布與草稿狀態集中在上方操作列，避免編輯完忘記上架。'
+				extraActions={
+					<button
+						type='button'
+						onClick={handleDelete}
+						className='inline-flex min-h-11 items-center justify-center rounded-xl border border-error/20 px-5 py-2.5 text-sm font-medium text-error transition-colors duration-200 hover:bg-error/10'
 					>
-						<svg
-							className='w-5 h-5 text-text-muted'
-							fill='none'
-							viewBox='0 0 24 24'
-							strokeWidth={2}
-							stroke='currentColor'
-						>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18'
-							/>
-						</svg>
-					</AppLink>
-					<h1 className='text-2xl font-bold text-text'>編輯活動資訊</h1>
-				</div>
-				<button
-					onClick={handleDelete}
-					className='px-4 py-2 text-sm font-medium text-error hover:bg-error/10 rounded-lg transition-colors duration-200'
-				>
-					刪除活動資訊
-				</button>
-			</div>
+						刪除活動資訊
+					</button>
+				}
+			/>
 
 			<div className='bg-card rounded-xl border border-border p-6'>
-				<form onSubmit={handleSubmit} noValidate className='space-y-6'>
+				<form
+					onSubmit={(event) => event.preventDefault()}
+					noValidate
+					className='space-y-6'
+				>
 					{error && (
 						<div className='bg-error/10 text-error text-sm px-4 py-2.5 rounded-lg'>{error}</div>
 					)}
@@ -543,21 +541,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 								</select>
 							</div>
 
-							<div>
-								<label htmlFor='status' className='block text-sm font-medium text-text mb-1.5'>
-									上架：
-								</label>
-								<select
-									id='status'
-									value={status}
-									onChange={(e) => setStatus(e.target.value as 'published' | 'draft')}
-									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 cursor-pointer'
-								>
-									<option value='draft'>草稿</option>
-									<option value='published'>已上架</option>
-								</select>
-							</div>
-
 							<div className='flex items-center gap-2 mt-2 pt-2 border-t border-border'>
 								<input
 									type='checkbox'
@@ -570,7 +553,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									htmlFor='isFeatured'
 									className='text-sm font-medium text-text cursor-pointer'
 								>
-									精選活動
+									設為精選活動
 								</label>
 							</div>
 
@@ -596,22 +579,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 							onChange={setContent}
 							placeholder='輸入活動詳情、流程說明與報名資訊...'
 						/>
-					</div>
-
-					<div className='flex gap-3 pt-4 border-t border-border'>
-						<button
-							type='submit'
-							disabled={submitting}
-							className='px-6 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50'
-						>
-							{submitting ? '儲存中...' : '儲存變更'}
-						</button>
-						<AppLink
-							href='/admin/products'
-							className='px-6 py-2.5 text-sm font-medium text-text-muted bg-surface border border-border rounded-lg hover:bg-surface-alt transition-colors duration-200 cursor-pointer'
-						>
-							取消
-						</AppLink>
 					</div>
 				</form>
 			</div>
