@@ -8,6 +8,7 @@ import {
 	fetchAcademyCourses,
 	fetchCategories,
 	fetchProducts,
+	fetchSiteSettings,
 	fetchSiteContents,
 } from '@/lib/api';
 
@@ -23,6 +24,7 @@ export default async function HomePage() {
 		categories,
 		academyCourses,
 		academyCategories,
+		siteSettings,
 		carouselItems,
 		homeAboutList,
 		carouselConfig,
@@ -31,6 +33,7 @@ export default async function HomePage() {
 		fetchCategories(),
 		fetchAcademyCourses({ status: 'published' }),
 		fetchAcademyCategories(true),
+		fetchSiteSettings(),
 		fetchSiteContents({ type: 'home_carousel', activeOnly: true }),
 		fetchSiteContents({ type: 'home_about', activeOnly: true }),
 		fetchSiteContents({ type: 'home_carousel_config' }),
@@ -61,6 +64,13 @@ export default async function HomePage() {
 		'<p>我們致力於促進校友與母校之間的互動、互惠，透過活動、公告與服務資訊，凝聚中原人在台北的連結與認同。</p>';
 	const homeAboutLink = homeAbout?.linkUrl || '/about';
 	const homeAboutImage = homeAbout?.imageUrl || '';
+	const joinLink =
+		siteSettings.contactLink?.trim() ||
+		siteSettings.facebookUrl?.trim() ||
+		'/about';
+	const academyLink = siteSettings.youtubeUrl?.trim() || '/academy';
+	const joinLinkExternal = /^https?:\/\//.test(joinLink);
+	const academyLinkExternal = /^https?:\/\//.test(academyLink);
 
 	return (
 		<>
@@ -170,26 +180,101 @@ export default async function HomePage() {
 			</section>
 
 			{/* ===== 活動分類 ===== */}
-			<section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
-				<div className='text-center mb-10'>
-					<h2 className='text-2xl sm:text-3xl font-bold text-text'>活動分類</h2>
-					<p className='text-text-muted mt-2'>依主題瀏覽校友會活動與服務內容</p>
-				</div>
+			<section className='py-18 lg:py-24 bg-surface-alt/70 border-y border-border/70'>
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+					<div className='max-w-3xl mx-auto text-center mb-12 lg:mb-14'>
+						<p className='inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-[0.18em] uppercase bg-primary/10 text-primary mb-4'>
+							快速導覽
+						</p>
+						<h2 className='text-3xl sm:text-4xl font-bold text-text'>活動分類</h2>
+						<p className='text-text-muted mt-3 text-base sm:text-lg'>
+							把首頁中段當成導覽樞紐，依主題快速找到適合參與的校友活動與服務內容。
+						</p>
+					</div>
 
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
-					{activeCategories.length > 0 ? (
-						activeCategories.map((category) => (
-							<CategoryCard
-								key={category.id}
-								category={category}
-								productCount={products.filter((p) => p.categoryId === category.id).length}
-							/>
-						))
-					) : (
-						<div className='sm:col-span-2 lg:col-span-4 rounded-2xl border border-border bg-surface px-6 py-10 text-center text-text-light'>
-							目前尚未建立活動分類。
+					<div className='rounded-[2rem] border border-border/80 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.28)] px-5 py-6 sm:px-7 sm:py-8 lg:px-8 lg:py-9'>
+						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
+							{activeCategories.length > 0 ? (
+								activeCategories.map((category) => (
+									<CategoryCard
+										key={category.id}
+										category={category}
+										productCount={products.filter((p) => p.categoryId === category.id).length}
+									/>
+								))
+							) : (
+								<div className='sm:col-span-2 lg:col-span-4 rounded-2xl border border-border bg-surface px-6 py-10 text-center text-text-light'>
+									目前尚未建立活動分類。
+								</div>
+							)}
 						</div>
-					)}
+					</div>
+				</div>
+			</section>
+
+			{/* ===== 行動 CTA ===== */}
+			<section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
+				<div className='rounded-[2rem] overflow-hidden border border-primary/15 bg-gradient-to-br from-primary/[0.08] via-white to-cta/[0.08] shadow-[0_24px_80px_-48px_rgba(37,99,235,0.45)]'>
+					<div className='grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-0'>
+						<div className='px-6 py-8 sm:px-8 lg:px-10 lg:py-10 border-b lg:border-b-0 lg:border-r border-primary/10'>
+							<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-3'>
+								立即行動
+							</p>
+							<h2 className='text-3xl sm:text-4xl font-bold text-text leading-tight'>
+								想加入校友會，或立即參加近期活動？
+							</h2>
+							<p className='text-text-muted mt-4 max-w-2xl'>
+								我們把最常用的兩個入口放在首頁，讓校友可以直接完成加入、聯繫與活動報名，不需要再往下找。
+							</p>
+							<div className='flex flex-wrap gap-3 mt-6'>
+								<a
+									href={joinLink}
+									target={joinLinkExternal ? '_blank' : '_self'}
+									rel={joinLinkExternal ? 'noreferrer' : undefined}
+									className='inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors duration-200'
+								>
+									加入校友會
+								</a>
+								<AppLink
+									href='/products'
+									className='inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white border border-border text-text text-sm font-semibold hover:bg-surface-alt transition-colors duration-200'
+								>
+									立即報名活動
+								</AppLink>
+								<a
+									href={academyLink}
+									target={academyLinkExternal ? '_blank' : '_self'}
+									rel={academyLinkExternal ? 'noreferrer' : undefined}
+									className='inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white border border-border text-text text-sm font-semibold hover:bg-surface-alt transition-colors duration-200'
+								>
+									觀看課程影片
+								</a>
+							</div>
+						</div>
+
+						<div className='px-6 py-8 sm:px-8 lg:px-10 lg:py-10'>
+							<div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+								<div className='rounded-2xl bg-white/80 border border-primary/10 p-5'>
+									<p className='text-sm font-semibold text-text'>加入校友會</p>
+									<p className='text-sm text-text-muted mt-2'>
+										透過粉專或聯絡入口，快速完成入會洽詢與會務聯繫。
+									</p>
+								</div>
+								<div className='rounded-2xl bg-white/80 border border-primary/10 p-5'>
+									<p className='text-sm font-semibold text-text'>活動報名</p>
+									<p className='text-sm text-text-muted mt-2'>
+										近期講座、聯誼、健行與會員活動都能從首頁直接進入。
+									</p>
+								</div>
+								<div className='rounded-2xl bg-white/80 border border-primary/10 p-5'>
+									<p className='text-sm font-semibold text-text'>校友學院</p>
+									<p className='text-sm text-text-muted mt-2'>
+										從精選課程與影音內容延伸學習，累積更多交流與知識分享。
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 
