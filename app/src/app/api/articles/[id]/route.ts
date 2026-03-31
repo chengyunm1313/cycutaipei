@@ -4,6 +4,7 @@ import { getDb } from '@/db/client';
 import { articles } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -58,6 +59,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 			excerpt?: string;
 			content?: string;
 			coverImage?: string;
+			coverImagePositionY?: number;
 			category?: string;
 			author?: string;
 			status?: 'published' | 'draft';
@@ -74,6 +76,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 				excerpt: data.excerpt,
 				content: data.content,
 				coverImage: data.coverImage,
+				coverImagePositionY:
+					data.coverImagePositionY === undefined
+						? undefined
+						: clampCoverImagePositionY(data.coverImagePositionY),
 				category: data.category,
 				author: data.author,
 				status: data.status,

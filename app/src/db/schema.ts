@@ -28,6 +28,7 @@ export const products = sqliteTable('products', {
 	purchaseLink: text('purchase_link'),
 	introVideoUrl: text('intro_video_url'),
 	listImage: text('list_image'),
+	coverImagePositionY: integer('cover_image_position_y').notNull().default(50),
 	images: text('images'), // JSON array
 	specs: text('specs'), // JSON object/array
 	catalogLink: text('catalog_link'),
@@ -45,6 +46,7 @@ export const articles = sqliteTable('articles', {
 	excerpt: text('excerpt'),
 	content: text('content'),
 	coverImage: text('cover_image'),
+	coverImagePositionY: integer('cover_image_position_y').notNull().default(50),
 	category: text('category'),
 	author: text('author'),
 	status: text('status', { enum: ['published', 'draft'] }).default('published'),
@@ -84,6 +86,7 @@ export const academyCourses = sqliteTable('academy_courses', {
 	categoryId: integer('category_id').references(() => academyCategories.id),
 	youtubeUrl: text('youtube_url'),
 	coverImage: text('cover_image'),
+	coverImagePositionY: integer('cover_image_position_y').notNull().default(50),
 	speaker: text('speaker'),
 	resourceLink: text('resource_link'),
 	isFeatured: integer('is_featured', { mode: 'boolean' }).default(false),

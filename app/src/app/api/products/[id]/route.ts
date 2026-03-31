@@ -4,6 +4,7 @@ import { getDb } from '@/db/client';
 import { products } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -45,6 +46,7 @@ interface ProductUpdateInput {
 	catalogLink?: string;
 	introVideoUrl?: string;
 	listImage?: string;
+	coverImagePositionY?: number;
 	images?: string;
 	specs?: string;
 	isFeatured?: boolean;
@@ -81,6 +83,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 				catalogLink: data.catalogLink,
 				introVideoUrl: data.introVideoUrl,
 				listImage: data.listImage,
+				coverImagePositionY:
+					data.coverImagePositionY === undefined
+						? undefined
+						: clampCoverImagePositionY(data.coverImagePositionY),
 				images: data.images,
 				specs: data.specs,
 				isFeatured: data.isFeatured,

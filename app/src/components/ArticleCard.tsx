@@ -1,6 +1,7 @@
 import AppLink from '@/components/AppLink';
 import Image from 'next/image';
 import { resolveContentDate } from '@/lib/contentDate';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 
 /**
  * 文章卡片元件通用介面
@@ -11,6 +12,7 @@ interface ArticleCardData {
 	title: string;
 	excerpt?: string | null;
 	coverImage?: string | null;
+	coverImagePositionY?: number | null;
 	category?: string | null;
 	author?: string | null;
 	postDate?: string | null;
@@ -43,6 +45,7 @@ export default function ArticleCard({ article }: { article: ArticleCardData }) {
 							fill
 							unoptimized={shouldBypassImageOptimization}
 							className='object-cover group-hover:scale-105 transition-transform duration-500'
+							style={getCoverImageObjectPositionStyle(article.coverImagePositionY)}
 							sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 						/>
 					) : (

@@ -7,10 +7,12 @@ import { fetchProduct, updateProduct, deleteProductApi, fetchCategories } from '
 import type { ApiCategory } from '@/data/types';
 import dynamic from 'next/dynamic';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import MultiImageSelectInput from '@/components/MultiImageSelectInput';
 import { useToast } from '@/components/ToastProvider';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { parseImageValue } from '@/lib/imageValue';
+import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -80,6 +82,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 	const [status, setStatus] = useState<'published' | 'draft'>('draft');
 	const [carouselImages, setCarouselImages] = useState<string[]>([]);
 	const [listImage, setListImage] = useState('');
+	const [coverImagePositionY, setCoverImagePositionY] = useState(DEFAULT_COVER_IMAGE_POSITION_Y);
 	const [keywords, setKeywords] = useState('');
 	const [purchaseLink, setPurchaseLink] = useState('');
 	const [catalogLink, setCatalogLink] = useState('');
@@ -117,6 +120,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				setStatus(prod.status as 'published' | 'draft');
 				setCarouselImages(parseImageValue(prod.images));
 				setListImage(prod.listImage || '');
+				setCoverImagePositionY(prod.coverImagePositionY ?? DEFAULT_COVER_IMAGE_POSITION_Y);
 				setKeywords(prod.keywords || '');
 				setPurchaseLink(prod.purchaseLink || '');
 				setCatalogLink(prod.catalogLink || '');
@@ -181,6 +185,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 				status,
 				images: carouselImages.length > 0 ? JSON.stringify(carouselImages) : null,
 				listImage: listImage || null,
+				coverImagePositionY,
 				keywords: keywords || null,
 				purchaseLink: normalizedPurchaseLink,
 				catalogLink: normalizedCatalogLink,
@@ -409,6 +414,12 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 							</p>
 
 							<ImageSelectInput label='活動列表圖片：' value={listImage} onChange={setListImage} />
+							<CoverImagePositionControl
+								label='活動封面顯示位置'
+								value={coverImagePositionY}
+								onChange={setCoverImagePositionY}
+								previewUrl={listImage || carouselImages[0]}
+							/>
 							<p className='text-xs text-text-light -mt-2'>圖片尺寸比例為2:1，建議尺寸960x480</p>
 
 							<div>

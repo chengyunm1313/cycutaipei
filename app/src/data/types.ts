@@ -36,6 +36,7 @@ export interface ApiProduct {
 	catalogLink: string | null;
 	introVideoUrl: string | null;
 	listImage: string | null;
+	coverImagePositionY: number;
 	images: string | null;
 	specs: string | null;
 	isFeatured: number | boolean;
@@ -65,6 +66,7 @@ export interface ApiAcademyCourse {
 	categoryId: number | null;
 	youtubeUrl: string | null;
 	coverImage: string | null;
+	coverImagePositionY: number;
 	speaker: string | null;
 	resourceLink: string | null;
 	isFeatured: number | boolean;
@@ -139,6 +141,7 @@ export interface ApiArticle {
 	excerpt: string | null;
 	content: string | null;
 	coverImage: string | null;
+	coverImagePositionY: number;
 	category: string | null;
 	author: string | null;
 	status: string;

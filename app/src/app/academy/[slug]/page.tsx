@@ -9,6 +9,7 @@ import {
 } from '@/lib/api';
 import AcademyCourseCard from '@/components/AcademyCourseCard';
 import { resolveContentDate } from '@/lib/contentDate';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 import { toYouTubeEmbedUrl } from '@/lib/youtube';
 
 export const runtime = 'edge';
@@ -64,6 +65,7 @@ export default async function AcademyCoursePage({ params }: PageProps) {
 									src={course.coverImage}
 									alt={course.title}
 									className='w-full aspect-[16/9] object-cover'
+									style={getCoverImageObjectPositionStyle(course.coverImagePositionY)}
 								/>
 							) : (
 								<div className='aspect-[16/9] flex items-center justify-center text-text-light'>

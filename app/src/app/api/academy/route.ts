@@ -6,6 +6,7 @@ import { academyCourses } from '@/db/schema';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { normalizeYouTubeUrl } from '@/lib/youtube';
+import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -17,6 +18,7 @@ interface AcademyCourseInput {
 	categoryId?: number | null;
 	youtubeUrl?: string | null;
 	coverImage?: string | null;
+	coverImagePositionY?: number;
 	speaker?: string | null;
 	resourceLink?: string | null;
 	isFeatured?: boolean;
@@ -114,6 +116,7 @@ export async function POST(request: NextRequest) {
 				categoryId: data.categoryId,
 				youtubeUrl: normalizedYouTubeUrl,
 				coverImage: data.coverImage,
+				coverImagePositionY: clampCoverImagePositionY(data.coverImagePositionY),
 				speaker: data.speaker,
 				resourceLink: normalizedResourceLink,
 				isFeatured: data.isFeatured ?? false,

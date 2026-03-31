@@ -8,6 +8,7 @@ import ArticleCard from '@/components/ArticleCard';
 import { fetchArticleBySlug, fetchArticles } from '@/lib/api';
 import type { ApiArticle } from '@/data/types';
 import { resolveContentDate } from '@/lib/contentDate';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -153,6 +154,7 @@ export default function BlogPostPage({ params }: PageProps) {
 						fill
 						unoptimized={shouldBypassImageOptimization}
 						className='object-cover'
+						style={getCoverImageObjectPositionStyle(article.coverImagePositionY)}
 						sizes='(max-width: 1024px) 100vw, 896px'
 						priority
 					/>

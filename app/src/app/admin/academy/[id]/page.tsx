@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import AppLink from '@/components/AppLink';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import type { ApiAcademyCategory } from '@/data/types';
 import {
 	deleteAcademyCourseApi,
@@ -16,6 +17,7 @@ import {
 } from '@/lib/api';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { normalizeYouTubeUrl } from '@/lib/youtube';
+import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -33,6 +35,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 	const [categoryId, setCategoryId] = useState<number | ''>('');
 	const [youtubeUrl, setYoutubeUrl] = useState('');
 	const [coverImage, setCoverImage] = useState('');
+	const [coverImagePositionY, setCoverImagePositionY] = useState(DEFAULT_COVER_IMAGE_POSITION_Y);
 	const [speaker, setSpeaker] = useState('');
 	const [resourceLink, setResourceLink] = useState('');
 	const [status, setStatus] = useState<'published' | 'draft'>('draft');
@@ -60,6 +63,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 				setCategoryId(course.categoryId ?? '');
 				setYoutubeUrl(course.youtubeUrl || '');
 				setCoverImage(course.coverImage || '');
+				setCoverImagePositionY(course.coverImagePositionY ?? DEFAULT_COVER_IMAGE_POSITION_Y);
 				setSpeaker(course.speaker || '');
 				setResourceLink(course.resourceLink || '');
 				setStatus(course.status as 'published' | 'draft');
@@ -108,6 +112,7 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 				categoryId: categoryId === '' ? null : categoryId,
 				youtubeUrl: normalizedYoutubeUrl,
 				coverImage: coverImage || null,
+				coverImagePositionY,
 				speaker: speaker || null,
 				resourceLink: normalizedResourceLink,
 				status,
@@ -272,6 +277,11 @@ export default function EditAcademyCoursePage({ params }: { params: Promise<{ id
 					</div>
 
 					<ImageSelectInput label='課程封面圖' value={coverImage} onChange={setCoverImage} />
+					<CoverImagePositionControl
+						value={coverImagePositionY}
+						onChange={setCoverImagePositionY}
+						previewUrl={coverImage}
+					/>
 
 					<div>
 						<label htmlFor='resourceLink' className='block text-sm font-medium text-text mb-1.5'>

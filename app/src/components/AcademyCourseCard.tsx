@@ -2,6 +2,7 @@ import Image from 'next/image';
 import AppLink from '@/components/AppLink';
 import type { ApiAcademyCourse } from '@/data/types';
 import { resolveContentDate } from '@/lib/contentDate';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 
 export default function AcademyCourseCard({
 	course,
@@ -26,6 +27,7 @@ export default function AcademyCourseCard({
 					alt={course.title}
 					fill
 					className='object-cover group-hover:scale-105 transition-transform duration-500'
+					style={getCoverImageObjectPositionStyle(course.coverImagePositionY)}
 					sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 				/>
 			</div>

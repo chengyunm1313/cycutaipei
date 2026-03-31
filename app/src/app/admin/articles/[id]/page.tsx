@@ -8,8 +8,10 @@ import AppLink from '@/components/AppLink';
 import { useRouter } from 'next/navigation';
 import { fetchArticle, fetchArticleCategories, updateArticle } from '@/lib/api';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import { useToast } from '@/components/ToastProvider';
 import type { ApiArticleCategory } from '@/data/types';
+import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
 
 // BlockNote 必須以 dynamic import 載入（不支援 SSR）
 const BlockNoteEditor = dynamic<{
@@ -42,6 +44,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 	const [excerpt, setExcerpt] = useState('');
 	const [category, setCategory] = useState('');
 	const [coverImage, setCoverImage] = useState('');
+	const [coverImagePositionY, setCoverImagePositionY] = useState(DEFAULT_COVER_IMAGE_POSITION_Y);
 	const [seoTitle, setSeoTitle] = useState('');
 	const [seoDescription, setSeoDescription] = useState('');
 	const [postDate, setPostDate] = useState('');
@@ -71,6 +74,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 				setExcerpt(article.excerpt || '');
 				setCategory(article.category || '');
 				setCoverImage(article.coverImage || '');
+				setCoverImagePositionY(article.coverImagePositionY ?? DEFAULT_COVER_IMAGE_POSITION_Y);
 				setSeoTitle(article.seoTitle || '');
 				setSeoDescription(article.seoDescription || '');
 				setPostDate(article.postDate || '');
@@ -102,6 +106,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 					excerpt,
 					category,
 					coverImage,
+					coverImagePositionY,
 					seoTitle,
 					seoDescription,
 					postDate,
@@ -116,6 +121,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 		excerpt,
 		category,
 		coverImage,
+		coverImagePositionY,
 		seoTitle,
 		seoDescription,
 		postDate,
@@ -143,6 +149,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 				excerpt,
 				category,
 				coverImage,
+				coverImagePositionY,
 				content: editorContent,
 				author,
 				seoTitle,
@@ -314,6 +321,11 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 							onChange={(url: string) => setCoverImage(url)}
 						/>
 					</div>
+					<CoverImagePositionControl
+						value={coverImagePositionY}
+						onChange={setCoverImagePositionY}
+						previewUrl={coverImage}
+					/>
 
 					{/* 作者 */}
 					<div className='bg-card rounded-xl border border-border p-4'>

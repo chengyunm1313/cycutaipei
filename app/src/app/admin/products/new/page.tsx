@@ -6,9 +6,11 @@ import AppLink from '@/components/AppLink';
 import { createProduct, fetchCategories } from '@/lib/api';
 import type { ApiCategory } from '@/data/types';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import MultiImageSelectInput from '@/components/MultiImageSelectInput';
 import dynamic from 'next/dynamic';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
+import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -28,6 +30,7 @@ export default function NewProductPage() {
 	const [status, setStatus] = useState<'published' | 'draft'>('draft');
 	const [carouselImages, setCarouselImages] = useState<string[]>([]);
 	const [listImage, setListImage] = useState('');
+	const [coverImagePositionY, setCoverImagePositionY] = useState(DEFAULT_COVER_IMAGE_POSITION_Y);
 	const [keywords, setKeywords] = useState('');
 	const [purchaseLink, setPurchaseLink] = useState('');
 	const [catalogLink, setCatalogLink] = useState('');
@@ -101,6 +104,7 @@ export default function NewProductPage() {
 				status,
 				images: carouselImages.length > 0 ? JSON.stringify(carouselImages) : null,
 				listImage: listImage || null,
+				coverImagePositionY,
 				keywords: keywords || null,
 				price: price === '' ? null : Number(price),
 				purchaseLink: normalizedPurchaseLink,
@@ -305,6 +309,12 @@ export default function NewProductPage() {
 							</p>
 
 							<ImageSelectInput label='活動列表圖片：' value={listImage} onChange={setListImage} />
+							<CoverImagePositionControl
+								label='活動封面顯示位置'
+								value={coverImagePositionY}
+								onChange={setCoverImagePositionY}
+								previewUrl={listImage || carouselImages[0]}
+							/>
 							<p className='text-xs text-text-light -mt-2'>圖片尺寸比例為2:1，建議尺寸960x480</p>
 
 							<div>

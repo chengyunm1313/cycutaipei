@@ -5,8 +5,10 @@ import dynamic from 'next/dynamic';
 import AppLink from '@/components/AppLink';
 import { useRouter } from 'next/navigation';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import { fetchArticleCategories } from '@/lib/api';
 import type { ApiArticleCategory } from '@/data/types';
+import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
 
 // BlockNote 必須以 dynamic import 載入（不支援 SSR）
 const BlockNoteEditor = dynamic<{
@@ -36,6 +38,7 @@ export default function NewArticlePage() {
 	const [excerpt, setExcerpt] = useState('');
 	const [category, setCategory] = useState('');
 	const [coverImage, setCoverImage] = useState('');
+	const [coverImagePositionY, setCoverImagePositionY] = useState(DEFAULT_COVER_IMAGE_POSITION_Y);
 	const [seoTitle, setSeoTitle] = useState('');
 	const [seoDescription, setSeoDescription] = useState('');
 	const [postDate, setPostDate] = useState('');
@@ -59,6 +62,9 @@ export default function NewArticlePage() {
 				if (data.excerpt) setExcerpt(data.excerpt);
 				if (data.category) setCategory(data.category);
 				if (data.coverImage) setCoverImage(data.coverImage);
+				if (typeof data.coverImagePositionY === 'number') {
+					setCoverImagePositionY(data.coverImagePositionY);
+				}
 				if (data.seoTitle) setSeoTitle(data.seoTitle);
 				if (data.seoDescription) setSeoDescription(data.seoDescription);
 				if (data.postDate) setPostDate(data.postDate);
@@ -87,6 +93,7 @@ export default function NewArticlePage() {
 				excerpt,
 				category,
 				coverImage,
+				coverImagePositionY,
 				seoTitle,
 				seoDescription,
 				postDate,
@@ -96,7 +103,7 @@ export default function NewArticlePage() {
 			localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
 			setLastSaved(data.lastSaved);
 		}, 2000);
-	}, [title, slug, excerpt, category, coverImage, seoTitle, seoDescription, postDate, editorContent]);
+	}, [title, slug, excerpt, category, coverImage, coverImagePositionY, seoTitle, seoDescription, postDate, editorContent]);
 
 	// 每次表單變動觸發 autoSave
 	useEffect(() => {
@@ -136,6 +143,7 @@ export default function NewArticlePage() {
 			excerpt,
 			category,
 			coverImage,
+			coverImagePositionY,
 			content: editorContent,
 			seoTitle,
 			seoDescription,
@@ -163,8 +171,10 @@ export default function NewArticlePage() {
 			setExcerpt('');
 			setCategory('');
 			setCoverImage('');
+			setCoverImagePositionY(DEFAULT_COVER_IMAGE_POSITION_Y);
 			setSeoTitle('');
 			setSeoDescription('');
+			setPostDate('');
 			setEditorContent('');
 			setInitialEditorHtml('');
 			setLastSaved(null);
@@ -266,6 +276,7 @@ export default function NewArticlePage() {
 									src={coverImage}
 									alt='封面預覽'
 									className='w-full h-full object-cover'
+									style={{ objectPosition: `center ${coverImagePositionY}%` }}
 									onError={() => setCoverPreviewError(true)}
 								/>
 								<button
@@ -371,6 +382,11 @@ export default function NewArticlePage() {
 								}}
 							/>
 						</div>
+						<CoverImagePositionControl
+							value={coverImagePositionY}
+							onChange={setCoverImagePositionY}
+							previewUrl={coverImage}
+						/>
 
 						{/* SEO 設定（可收合） */}
 						<div className='border-t border-border pt-4'>

@@ -111,7 +111,11 @@ export default async function ProductPage({ params }: PageProps) {
 					{/* 產品主體 */}
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16'>
 						{/* 左側：圖片輪播 */}
-						<ImageCarousel images={images} productName={product.name} />
+						<ImageCarousel
+							images={images}
+							productName={product.name}
+							coverImagePositionY={product.coverImagePositionY}
+						/>
 
 						{/* 右側：產品資訊 */}
 						<div>

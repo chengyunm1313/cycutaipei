@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 
 /**
  * 產品圖片輪播元件
@@ -10,9 +11,11 @@ import { useState } from 'react';
 export default function ImageCarousel({
 	images,
 	productName,
+	coverImagePositionY,
 }: {
 	images: string[];
 	productName: string;
+	coverImagePositionY?: number | null;
 }) {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const activeImage = images[activeIndex] || '';
@@ -32,6 +35,7 @@ export default function ImageCarousel({
 					fill
 					unoptimized={shouldBypassImageOptimization}
 					className='object-cover'
+					style={getCoverImageObjectPositionStyle(coverImagePositionY)}
 					sizes='(max-width: 768px) 100vw, 50vw'
 					priority
 				/>
@@ -109,6 +113,7 @@ export default function ImageCarousel({
 								fill
 								unoptimized={shouldBypassThumbOptimization}
 								className='object-cover'
+								style={getCoverImageObjectPositionStyle(coverImagePositionY)}
 								sizes='64px'
 							/>
 						</button>

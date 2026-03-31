@@ -4,6 +4,7 @@ import { getDb } from '@/db/client';
 import { articles } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
 
 export const runtime = 'edge';
 
@@ -14,6 +15,7 @@ interface ArticleInput {
 	excerpt?: string;
 	content?: string;
 	coverImage?: string;
+	coverImagePositionY?: number;
 	category?: string;
 	author?: string;
 	status?: 'published' | 'draft';
@@ -76,6 +78,7 @@ export async function POST(request: NextRequest) {
 				excerpt: data.excerpt,
 				content: data.content,
 				coverImage: data.coverImage,
+				coverImagePositionY: clampCoverImagePositionY(data.coverImagePositionY),
 				category: data.category,
 				author: data.author || 'Admin',
 				status: data.status || 'draft',

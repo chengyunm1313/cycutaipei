@@ -2,6 +2,7 @@ import AppLink from '@/components/AppLink';
 import Image from 'next/image';
 import type { ApiProduct } from '@/data/types';
 import { parseImageValue } from '@/lib/imageValue';
+import { getCoverImageObjectPositionStyle } from '@/lib/coverImagePosition';
 
 /**
  * 產品卡片元件
@@ -36,6 +37,7 @@ export default function ProductCard({
 					fill
 					unoptimized={shouldBypassImageOptimization}
 					className='object-cover group-hover:scale-105 transition-transform duration-500'
+					style={getCoverImageObjectPositionStyle(product.coverImagePositionY)}
 					sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 				/>
 			</div>
