@@ -65,6 +65,8 @@ function getMenuDescription(menu: EditableMenu): string {
 	switch (menu.url) {
 		case '/products':
 			return '產品專屬頁面';
+		case '/academy':
+			return '校友學院專屬頁面';
 		case '/about':
 			return '關於我們專屬頁面';
 		case '/blog':
@@ -111,6 +113,8 @@ function getEditLink(menu: EditableMenu): string | null {
 	switch (menu.url) {
 		case '/products':
 			return '/admin/products';
+		case '/academy':
+			return '/admin/academy';
 		case '/about':
 			return '/admin/site-management/about';
 		case '/faq':

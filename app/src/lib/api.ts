@@ -6,6 +6,8 @@
 import type {
 	ApiProduct,
 	ApiCategory,
+	ApiAcademyCategory,
+	ApiAcademyCourse,
 	ApiArticle,
 	ApiArticleCategory,
 	ApiUser,
@@ -120,6 +122,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 		if (
 			url.includes('products') ||
 			url.includes('categories') ||
+			url.includes('academy') ||
 			url.includes('articles') ||
 			url.includes('site-content')
 		) {
@@ -263,6 +266,105 @@ export async function updateProduct(id: number, data: Partial<ApiProduct>): Prom
 export async function deleteProductApi(id: number): Promise<void> {
 	await fetchJson(`/api/products/${id}`, {
 		method: 'DELETE',
+	});
+}
+
+// ===== Academy =====
+
+export async function fetchAcademyCourses(params?: {
+	status?: string;
+	categoryId?: number;
+	q?: string;
+	limit?: number;
+	slug?: string;
+}): Promise<ApiAcademyCourse[]> {
+	const searchParams = new URLSearchParams();
+	if (params?.status) searchParams.set('status', params.status);
+	if (params?.categoryId) searchParams.set('categoryId', String(params.categoryId));
+	if (params?.q) searchParams.set('q', params.q);
+	if (params?.limit) searchParams.set('limit', String(params.limit));
+	if (params?.slug) searchParams.set('slug', params.slug);
+	const qs = searchParams.toString();
+	return fetchJson<ApiAcademyCourse[]>(`/api/academy${qs ? `?${qs}` : ''}`);
+}
+
+export async function fetchAcademyCourseBySlug(slug: string): Promise<ApiAcademyCourse> {
+	return fetchJson<ApiAcademyCourse>(`/api/academy?slug=${encodeURIComponent(slug)}`);
+}
+
+export async function createAcademyCourse(
+	data: Partial<ApiAcademyCourse>
+): Promise<ApiAcademyCourse> {
+	return fetchJson<ApiAcademyCourse>('/api/academy', {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+}
+
+export async function fetchAcademyCourse(id: number): Promise<ApiAcademyCourse> {
+	return fetchJson<ApiAcademyCourse>(`/api/academy/${id}`);
+}
+
+export async function updateAcademyCourse(
+	id: number,
+	data: Partial<ApiAcademyCourse>
+): Promise<ApiAcademyCourse> {
+	return fetchJson<ApiAcademyCourse>(`/api/academy/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify(data),
+	});
+}
+
+export async function deleteAcademyCourseApi(id: number): Promise<void> {
+	await fetchJson(`/api/academy/${id}`, {
+		method: 'DELETE',
+	});
+}
+
+export async function fetchAcademyCategories(
+	activeOnly?: boolean
+): Promise<ApiAcademyCategory[]> {
+	const params = activeOnly ? '?active=1' : '';
+	return fetchJson<ApiAcademyCategory[]>(`/api/academy-categories${params}`);
+}
+
+export async function fetchAcademyCategoryBySlug(slug: string): Promise<ApiAcademyCategory> {
+	return fetchJson<ApiAcademyCategory>(`/api/academy-categories?slug=${encodeURIComponent(slug)}`);
+}
+
+export async function createAcademyCategory(
+	data: Partial<ApiAcademyCategory>
+): Promise<ApiAcademyCategory> {
+	return fetchJson<ApiAcademyCategory>('/api/academy-categories', {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+}
+
+export async function fetchAcademyCategory(id: number): Promise<ApiAcademyCategory> {
+	return fetchJson<ApiAcademyCategory>(`/api/academy-categories/${id}`);
+}
+
+export async function updateAcademyCategory(
+	id: number,
+	data: Partial<ApiAcademyCategory>
+): Promise<ApiAcademyCategory> {
+	return fetchJson<ApiAcademyCategory>(`/api/academy-categories/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify(data),
+	});
+}
+
+export async function deleteAcademyCategoryApi(id: number): Promise<void> {
+	await fetchJson(`/api/academy-categories/${id}`, {
+		method: 'DELETE',
+	});
+}
+
+export async function updateAcademyCategoryOrderApi(updates: { id: number; order: number }[]) {
+	return fetchJson('/api/academy-categories/order', {
+		method: 'PUT',
+		body: JSON.stringify({ updates }),
 	});
 }
 

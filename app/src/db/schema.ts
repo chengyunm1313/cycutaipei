@@ -64,6 +64,36 @@ export const articleCategories = sqliteTable('article_categories', {
 	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const academyCategories = sqliteTable('academy_categories', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull().unique(),
+	slug: text('slug').notNull().unique(),
+	description: text('description'),
+	image: text('image'),
+	sortOrder: integer('sort_order').notNull().default(0),
+	isActive: integer('is_active', { mode: 'boolean' }).default(true),
+	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const academyCourses = sqliteTable('academy_courses', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	title: text('title').notNull(),
+	slug: text('slug').notNull().unique(),
+	excerpt: text('excerpt'),
+	content: text('content'),
+	categoryId: integer('category_id').references(() => academyCategories.id),
+	youtubeUrl: text('youtube_url'),
+	coverImage: text('cover_image'),
+	speaker: text('speaker'),
+	resourceLink: text('resource_link'),
+	isFeatured: integer('is_featured', { mode: 'boolean' }).default(false),
+	sortOrder: integer('sort_order').notNull().default(0),
+	status: text('status', { enum: ['published', 'draft'] }).default('published'),
+	postDate: text('post_date'),
+	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+	updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const users = sqliteTable('users', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	username: text('username').notNull().unique(),

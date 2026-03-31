@@ -74,6 +74,29 @@ const sidebarItemsBase: SidebarItem[] = [
 		],
 	},
 	{
+		label: '校友學院管理',
+		permission: 'academy',
+		icon: (
+			<svg
+				className='w-5 h-5'
+				fill='none'
+				viewBox='0 0 24 24'
+				strokeWidth={1.5}
+				stroke='currentColor'
+			>
+				<path
+					strokeLinecap='round'
+					strokeLinejoin='round'
+					d='M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0012 20.904a48.62 48.62 0 008.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0A50.636 50.636 0 0112 13.489a50.636 50.636 0 017.74-3.342m-15.48 0a50.115 50.115 0 019.08-3.568.75.75 0 01.36 0 50.114 50.114 0 019.08 3.568m-16.5 0V6.75A2.25 2.25 0 016 4.5h12a2.25 2.25 0 012.25 2.25v3.397'
+				/>
+			</svg>
+		),
+		subItems: [
+			{ label: '分類管理', href: '/admin/academy-categories' },
+			{ label: '課程內容', href: '/admin/academy' },
+		],
+	},
+	{
 		label: '最新消息管理',
 		permission: 'articles',
 		icon: (
@@ -191,6 +214,7 @@ function AdminContent({ children }: { children: ReactNode }) {
 	>([]);
 	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
 		活動資訊管理: false,
+		校友學院管理: false,
 		最新消息管理: false,
 		網站管理: false,
 		'網站管理::導覽頁面': false,

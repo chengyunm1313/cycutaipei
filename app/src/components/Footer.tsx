@@ -81,20 +81,39 @@ export default function Footer() {
 		};
 	}, []);
 
-	const quickLinks = useMemo(
-		() =>
-			bottomMenus.length > 0
-				? bottomMenus.map((menu) => ({
-						id: menu.id,
-						title: menu.title,
-						href: resolveMenuHref(menu),
-						target: menu.target || '_self',
-					}))
-				: [
+	const quickLinks = useMemo<Array<{ id: number | string; title: string; href: string; target: string }>>(
+		() => {
+			if (bottomMenus.length === 0) {
+				return [
 						{ id: 'home', title: '首頁', href: '/', target: '_self' },
 						{ id: 'products', title: '活動資訊', href: '/products', target: '_self' },
+						{ id: 'academy', title: '校友學院', href: '/academy', target: '_self' },
 						{ id: 'blog', title: '最新消息', href: '/blog', target: '_self' },
-					],
+					];
+			}
+
+			const mapped: Array<{ id: number | string; title: string; href: string; target: string }> =
+				bottomMenus.map((menu) => ({
+					id: menu.id,
+					title: menu.title,
+					href: resolveMenuHref(menu),
+					target: menu.target || '_self',
+				}));
+
+			if (mapped.some((item) => item.href === '/academy')) {
+				return mapped;
+			}
+
+			const productIndex = mapped.findIndex((item) => item.href === '/products');
+			const nextLinks = [...mapped];
+			nextLinks.splice(productIndex >= 0 ? productIndex + 1 : nextLinks.length, 0, {
+				id: 'academy',
+				title: '校友學院',
+				href: '/academy',
+				target: '_self',
+			});
+			return nextLinks;
+		},
 		[bottomMenus]
 	);
 

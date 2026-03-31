@@ -45,6 +45,36 @@ export interface ApiProduct {
 	createdAt: string;
 }
 
+export interface ApiAcademyCategory {
+	id: number;
+	name: string;
+	slug: string;
+	description: string | null;
+	image: string | null;
+	sortOrder: number;
+	isActive: number | boolean;
+	createdAt: string;
+}
+
+export interface ApiAcademyCourse {
+	id: number;
+	title: string;
+	slug: string;
+	excerpt: string | null;
+	content: string | null;
+	categoryId: number | null;
+	youtubeUrl: string | null;
+	coverImage: string | null;
+	speaker: string | null;
+	resourceLink: string | null;
+	isFeatured: number | boolean;
+	sortOrder: number;
+	status: string;
+	postDate: string | null;
+	createdAt: string;
+	updatedAt: string;
+}
+
 // ===== 分類 =====
 export interface Category {
 	id: number;
@@ -143,6 +173,8 @@ export type Permission =
 	| 'dashboard'
 	| 'products'
 	| 'categories'
+	| 'academy'
+	| 'academy_categories'
 	// 預留權限：目前標籤模組尚未啟用於前後台內容流程
 	| 'tags'
 	| 'articles'
@@ -159,6 +191,8 @@ export const rolePermissions: Record<Role, Permission[]> = {
 		'dashboard',
 		'products',
 		'categories',
+		'academy',
+		'academy_categories',
 		'tags',
 		'articles',
 		'own_articles',
@@ -172,6 +206,8 @@ export const rolePermissions: Record<Role, Permission[]> = {
 		'dashboard',
 		'products',
 		'categories',
+		'academy',
+		'academy_categories',
 		'tags',
 		'articles',
 		'own_articles',

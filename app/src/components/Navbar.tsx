@@ -55,8 +55,8 @@ const fallbackMenus: ApiMenu[] = [
 	},
 	{
 		id: -4,
-		title: '關於我們',
-		url: '/about',
+		title: '校友學院',
+		url: '/academy',
 		type: 'link',
 		pageId: null,
 		position: 'top',
@@ -70,6 +70,21 @@ const fallbackMenus: ApiMenu[] = [
 	},
 	{
 		id: -5,
+		title: '關於我們',
+		url: '/about',
+		type: 'link',
+		pageId: null,
+		position: 'top',
+		parentMenuId: null,
+		customLink: null,
+		sortOrder: 5,
+		target: '_self',
+		isActive: 1,
+		createdAt: '',
+		updatedAt: '',
+	},
+	{
+		id: -6,
 		title: '常見問題',
 		url: '/faq',
 		type: 'link',
@@ -77,7 +92,7 @@ const fallbackMenus: ApiMenu[] = [
 		position: 'top',
 		parentMenuId: null,
 		customLink: null,
-		sortOrder: 5,
+		sortOrder: 6,
 		target: '_self',
 		isActive: 1,
 		createdAt: '',
@@ -154,7 +169,23 @@ export default function Navbar({ initialSiteName = '中原大學台北市校友�
 				const activeMenus = menus
 					.filter((menu) => isMenuActive(menu))
 					.sort((a, b) => a.sortOrder - b.sortOrder);
-				setMenuList(activeMenus);
+				const hasAcademy = activeMenus.some((menu) => resolveMenuHref(menu) === '/academy');
+				if (hasAcademy) {
+					setMenuList(activeMenus);
+					return;
+				}
+				const injectionIndex = activeMenus.findIndex((menu) => resolveMenuHref(menu) === '/products');
+				const nextMenus = [...activeMenus];
+				nextMenus.splice(injectionIndex >= 0 ? injectionIndex + 1 : nextMenus.length, 0, {
+					...fallbackMenus.find((menu) => menu.url === '/academy')!,
+					id: -999,
+				});
+				setMenuList(
+					nextMenus.map((menu, index) => ({
+						...menu,
+						sortOrder: index + 1,
+					}))
+				);
 			})
 			.catch(() => {
 				setMenuList(fallbackMenus);
