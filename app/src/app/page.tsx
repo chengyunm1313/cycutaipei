@@ -2,7 +2,14 @@ import HomeCarousel from '@/components/HomeCarousel';
 import AppLink from '@/components/AppLink';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
-import { fetchCategories, fetchProducts, fetchSiteContents } from '@/lib/api';
+import AcademyCourseCard from '@/components/AcademyCourseCard';
+import {
+	fetchAcademyCategories,
+	fetchAcademyCourses,
+	fetchCategories,
+	fetchProducts,
+	fetchSiteContents,
+} from '@/lib/api';
 
 export const runtime = 'edge';
 
@@ -11,9 +18,19 @@ export const runtime = 'edge';
  * Hero 區塊 + 精選活動 + 活動分類 + 最新活動
  */
 export default async function HomePage() {
-	const [products, categories, carouselItems, homeAboutList, carouselConfig] = await Promise.all([
+	const [
+		products,
+		categories,
+		academyCourses,
+		academyCategories,
+		carouselItems,
+		homeAboutList,
+		carouselConfig,
+	] = await Promise.all([
 		fetchProducts(),
 		fetchCategories(),
+		fetchAcademyCourses({ status: 'published' }),
+		fetchAcademyCategories(true),
 		fetchSiteContents({ type: 'home_carousel', activeOnly: true }),
 		fetchSiteContents({ type: 'home_about', activeOnly: true }),
 		fetchSiteContents({ type: 'home_carousel_config' }),
@@ -22,6 +39,9 @@ export default async function HomePage() {
 	const activeCategories = categories.filter((category) => category.isActive);
 	const featuredProducts = products.filter((p) => p.status === 'published').slice(0, 4);
 	const latestProducts = products.filter((p) => p.status === 'published').slice(0, 6);
+	const featuredAcademyCourses = academyCourses
+		.filter((course) => course.status === 'published' && course.isFeatured)
+		.slice(0, 3);
 	const homeAbout = homeAboutList[0];
 
 	let carouselSettings = undefined;
@@ -112,6 +132,40 @@ export default async function HomePage() {
 							)}
 						</div>
 					</div>
+				</div>
+			</section>
+
+			{/* ===== 精選課程 ===== */}
+			<section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20'>
+				<div className='flex items-end justify-between mb-8'>
+					<div>
+						<h2 className='text-2xl sm:text-3xl font-bold text-text'>精選課程</h2>
+						<p className='text-text-muted mt-2'>透過影片課程延伸校友交流與知識分享</p>
+					</div>
+					<AppLink
+						href='/academy'
+						className='hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary-dark transition-colors duration-200 cursor-pointer'
+					>
+						查看全部
+					</AppLink>
+				</div>
+
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+					{featuredAcademyCourses.length > 0 ? (
+						featuredAcademyCourses.map((course) => (
+							<AcademyCourseCard
+								key={course.id}
+								course={course}
+								categoryName={
+									academyCategories.find((category) => category.id === course.categoryId)?.name
+								}
+							/>
+						))
+					) : (
+						<div className='sm:col-span-2 lg:col-span-3 rounded-2xl border border-border bg-surface px-6 py-10 text-center text-text-light'>
+							目前尚無精選課程。
+						</div>
+					)}
 				</div>
 			</section>
 
