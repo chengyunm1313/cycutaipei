@@ -38,6 +38,106 @@ interface PageProps {
 	params: Promise<{ slug: string }>;
 }
 
+function AboutOrganizationExtras({
+	chairMembers,
+	supervisors,
+	directors,
+}: {
+	chairMembers: typeof BOARD_MEMBERS;
+	supervisors: typeof BOARD_MEMBERS;
+	directors: typeof BOARD_MEMBERS;
+}) {
+	return (
+		<div className='mt-10 space-y-8'>
+			<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
+				<div className='flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between'>
+					<div>
+						<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>章程下載</p>
+						<h2 className='text-2xl font-bold text-text'>中華民國中原大學校友總會章程</h2>
+						<p className='text-text-muted mt-2'>
+							提供第 11 屆章程 PDF，方便校友查閱組織宗旨、會員權利義務與會務規範。
+						</p>
+					</div>
+					<div className='flex flex-wrap gap-3'>
+						<a
+							href={CHARTER_FILE_URL}
+							target='_blank'
+							rel='noreferrer'
+							className='inline-flex items-center justify-center px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors'
+						>
+							開啟章程 PDF
+						</a>
+						<a
+							href={CHARTER_FILE_URL}
+							download='中華民國中原大學校友總會章程(11屆).pdf'
+							className='inline-flex items-center justify-center px-5 py-3 rounded-xl border border-border text-text text-sm font-semibold hover:bg-surface transition-colors'
+						>
+							下載章程
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
+				<div className='max-w-3xl'>
+					<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>理監事名單</p>
+					<h2 className='text-2xl font-bold text-text'>第24屆理監事與會務人員</h2>
+					<p className='text-text-muted mt-2'>
+						名單依 2024 年 12 月 2 日會員資料整理，方便校友快速查閱本屆主要幹部與理監事編制。
+					</p>
+				</div>
+
+				<div className='mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]'>
+					<div className='rounded-2xl bg-surface px-5 py-5'>
+						<h3 className='text-lg font-bold text-text'>主要幹部</h3>
+						<div className='mt-4 space-y-3'>
+							{chairMembers.map((member) => (
+								<div
+									key={`${member.role}-${member.name}`}
+									className='flex items-center justify-between gap-4 rounded-xl border border-border bg-white px-4 py-3'
+								>
+									<span className='text-sm font-semibold text-text-muted'>{member.role}</span>
+									<span className='text-base font-bold text-text'>{member.name}</span>
+								</div>
+							))}
+						</div>
+					</div>
+
+					<div className='rounded-2xl bg-surface px-5 py-5'>
+						<h3 className='text-lg font-bold text-text'>監事名單</h3>
+						<div className='mt-4 space-y-3'>
+							{supervisors.map((member) => (
+								<div
+									key={`${member.role}-${member.name}`}
+									className='flex items-center justify-between gap-4 rounded-xl border border-border bg-white px-4 py-3'
+								>
+									<span className='text-sm font-semibold text-text-muted'>{member.role}</span>
+									<span className='text-base font-bold text-text'>{member.name}</span>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<div className='mt-6 rounded-2xl bg-surface px-5 py-5'>
+					<div className='flex items-center justify-between gap-4'>
+						<h3 className='text-lg font-bold text-text'>理事名單</h3>
+						<span className='text-sm font-semibold text-text-muted'>{directors.length} 位</span>
+					</div>
+					<div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3'>
+						{directors.map((member) => (
+							<div key={`${member.role}-${member.name}`} className='rounded-xl border border-border bg-white px-4 py-3'>
+								<p className='text-sm font-semibold text-text-muted'>{member.role}</p>
+								<p className='mt-1 text-base font-bold text-text'>{member.name}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+		</div>
+	);
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
 	const { slug } = await params;
 	const pages = await fetchSiteContents({ type: 'about_page', slug });
@@ -108,7 +208,18 @@ export default async function AboutDetailPage({ params }: PageProps) {
 			</section>
 
 			{Array.isArray(extras.content_blocks) && extras.content_blocks.length > 0 ? (
-				<BlockRenderer blocks={extras.content_blocks} />
+				<>
+					<BlockRenderer blocks={extras.content_blocks} />
+					{shouldShowCharter && (
+						<section className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10'>
+							<AboutOrganizationExtras
+								chairMembers={chairMembers}
+								supervisors={supervisors}
+								directors={directors}
+							/>
+						</section>
+					)}
+				</>
 			) : (
 				/* 舊版的渲染邏輯 (向下相容) */
 				<section className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10'>
@@ -157,100 +268,11 @@ export default async function AboutDetailPage({ params }: PageProps) {
 					)}
 
 					{shouldShowCharter && (
-						<div className='mt-10 space-y-8'>
-							<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
-								<div className='flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between'>
-									<div>
-										<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>
-											章程下載
-										</p>
-										<h2 className='text-2xl font-bold text-text'>中華民國中原大學校友總會章程</h2>
-										<p className='text-text-muted mt-2'>
-											提供第 11 屆章程 PDF，方便校友查閱組織宗旨、會員權利義務與會務規範。
-										</p>
-									</div>
-									<div className='flex flex-wrap gap-3'>
-										<a
-											href={CHARTER_FILE_URL}
-											target='_blank'
-											rel='noreferrer'
-											className='inline-flex items-center justify-center px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors'
-										>
-											開啟章程 PDF
-										</a>
-										<a
-											href={CHARTER_FILE_URL}
-											download='中華民國中原大學校友總會章程(11屆).pdf'
-											className='inline-flex items-center justify-center px-5 py-3 rounded-xl border border-border text-text text-sm font-semibold hover:bg-surface transition-colors'
-										>
-											下載章程
-										</a>
-									</div>
-								</div>
-							</section>
-
-							<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
-								<div className='max-w-3xl'>
-									<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>
-										理監事名單
-									</p>
-									<h2 className='text-2xl font-bold text-text'>第24屆理監事與會務人員</h2>
-									<p className='text-text-muted mt-2'>
-										名單依 2024 年 12 月 2 日會員資料整理，方便校友快速查閱本屆主要幹部與理監事編制。
-									</p>
-								</div>
-
-								<div className='mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]'>
-									<div className='rounded-2xl bg-surface px-5 py-5'>
-										<h3 className='text-lg font-bold text-text'>主要幹部</h3>
-										<div className='mt-4 space-y-3'>
-											{chairMembers.map((member) => (
-												<div
-													key={`${member.role}-${member.name}`}
-													className='flex items-center justify-between gap-4 rounded-xl border border-border bg-white px-4 py-3'
-												>
-													<span className='text-sm font-semibold text-text-muted'>{member.role}</span>
-													<span className='text-base font-bold text-text'>{member.name}</span>
-												</div>
-											))}
-										</div>
-									</div>
-
-									<div className='rounded-2xl bg-surface px-5 py-5'>
-										<h3 className='text-lg font-bold text-text'>監事名單</h3>
-										<div className='mt-4 space-y-3'>
-											{supervisors.map((member) => (
-												<div
-													key={`${member.role}-${member.name}`}
-													className='flex items-center justify-between gap-4 rounded-xl border border-border bg-white px-4 py-3'
-												>
-													<span className='text-sm font-semibold text-text-muted'>{member.role}</span>
-													<span className='text-base font-bold text-text'>{member.name}</span>
-												</div>
-											))}
-										</div>
-									</div>
-								</div>
-
-								<div className='mt-6 rounded-2xl bg-surface px-5 py-5'>
-									<div className='flex items-center justify-between gap-4'>
-										<h3 className='text-lg font-bold text-text'>理事名單</h3>
-										<span className='text-sm font-semibold text-text-muted'>{directors.length} 位</span>
-									</div>
-									<div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3'>
-										{directors.map((member) => (
-											<div
-												key={`${member.role}-${member.name}`}
-												className='rounded-xl border border-border bg-white px-4 py-3'
-											>
-												<p className='text-sm font-semibold text-text-muted'>{member.role}</p>
-												<p className='mt-1 text-base font-bold text-text'>{member.name}</p>
-											</div>
-										))}
-									</div>
-								</div>
-							</section>
-						</div>
+						<AboutOrganizationExtras
+							chairMembers={chairMembers}
+							supervisors={supervisors}
+							directors={directors}
+						/>
 					)}
 				</section>
 			)}
