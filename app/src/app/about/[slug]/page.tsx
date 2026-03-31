@@ -7,6 +7,8 @@ import type { PageBlock } from '@/data/types';
 
 export const runtime = 'edge';
 
+const CHARTER_FILE_URL = '/docs/cycu-alumni-charter-11th.pdf';
+
 interface AboutExtras {
 	image2?: string;
 	image3?: string;
@@ -44,6 +46,7 @@ export default async function AboutDetailPage({ params }: PageProps) {
 	}
 
 	const media = [page.imageUrl, extras.image2, extras.image3].filter(Boolean) as string[];
+	const shouldShowCharter = page.slug === 'organization-profile';
 
 	return (
 		<main className='min-h-screen bg-[#f3f3f3]'>
@@ -129,6 +132,39 @@ export default async function AboutDetailPage({ params }: PageProps) {
 								More 前往連結
 							</a>
 						</div>
+					)}
+
+					{shouldShowCharter && (
+						<section className='mt-10 rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
+							<div className='flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between'>
+								<div>
+									<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>
+										章程下載
+									</p>
+									<h2 className='text-2xl font-bold text-text'>中華民國中原大學校友總會章程</h2>
+									<p className='text-text-muted mt-2'>
+										提供第 11 屆章程 PDF，方便校友查閱組織宗旨、會員權利義務與會務規範。
+									</p>
+								</div>
+								<div className='flex flex-wrap gap-3'>
+									<a
+										href={CHARTER_FILE_URL}
+										target='_blank'
+										rel='noreferrer'
+										className='inline-flex items-center justify-center px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors'
+									>
+										開啟章程 PDF
+									</a>
+									<a
+										href={CHARTER_FILE_URL}
+										download='中華民國中原大學校友總會章程(11屆).pdf'
+										className='inline-flex items-center justify-center px-5 py-3 rounded-xl border border-border text-text text-sm font-semibold hover:bg-surface transition-colors'
+									>
+										下載章程
+									</a>
+								</div>
+							</div>
+						</section>
 					)}
 				</section>
 			)}
