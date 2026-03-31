@@ -29,8 +29,8 @@ interface SiteSettingsFormState {
 }
 
 const defaultFormState: SiteSettingsFormState = {
-	siteName: '中原大學台北市校友會',
-	siteTitle: '中原大學台北市校友會｜最新消息與活動資訊',
+	siteName: '台北市中原大學校友會',
+	siteTitle: '台北市中原大學校友會｜最新消息與活動資訊',
 	logoUrl: '',
 	footerLogoUrl: '',
 	faviconUrl: '',
@@ -216,7 +216,7 @@ export default function AdminSiteSettingsPage() {
 							value={form.siteTitle}
 							onChange={(event) => setForm((prev) => ({ ...prev, siteTitle: event.target.value }))}
 							className='w-full px-4 py-2 text-base rounded-xl border border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors'
-							placeholder='例如：中原大學台北市校友會｜最新消息與活動資訊'
+							placeholder='例如：台北市中原大學校友會｜最新消息與活動資訊'
 						/>
 					</div>
 				</div>
@@ -396,7 +396,7 @@ export default function AdminSiteSettingsPage() {
 							value={form.copyright}
 							onChange={(event) => setForm((prev) => ({ ...prev, copyright: event.target.value }))}
 							className='w-full px-4 py-2 text-base rounded-xl border border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors'
-							placeholder='例如：© 2026 中原大學台北市校友會. All rights reserved.'
+							placeholder='例如：© 2026 台北市中原大學校友會. All rights reserved.'
 						/>
 					</div>
 

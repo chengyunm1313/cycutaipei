@@ -227,7 +227,7 @@ export default function BlogPostPage({ params }: PageProps) {
 						dateModified: article.updatedAt,
 						publisher: {
 							'@type': 'Organization',
-							name: '中原大學台北市校友會',
+							name: '台北市中原大學校友會',
 						},
 					}),
 				}}

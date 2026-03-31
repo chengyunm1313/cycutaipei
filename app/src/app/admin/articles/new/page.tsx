@@ -129,7 +129,7 @@ export default function NewArticlePage() {
 			.replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
 			.replace(/^-|-$/g, '');
 		setSlug(autoSlug);
-		if (!seoTitle) setSeoTitle(`${value} | 中原大學台北市校友會`);
+		if (!seoTitle) setSeoTitle(`${value} | 台北市中原大學校友會`);
 	};
 
 	const handleSave = async (status: 'published' | 'draft') => {

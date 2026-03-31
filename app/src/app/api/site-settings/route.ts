@@ -13,8 +13,8 @@ const corsHeaders = {
 };
 
 const DEFAULT_SITE_SETTINGS: Omit<ApiSiteSettings, 'id' | 'updatedAt'> = {
-	siteName: '中原大學台北市校友會',
-	siteTitle: '中原大學台北市校友會｜最新消息與活動資訊',
+	siteName: '台北市中原大學校友會',
+	siteTitle: '台北市中原大學校友會｜最新消息與活動資訊',
 	logoUrl: null,
 	footerLogoUrl: null,
 	faviconUrl: null,

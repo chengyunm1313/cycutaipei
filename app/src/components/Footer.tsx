@@ -21,7 +21,7 @@ function isExternalUrl(url: string): boolean {
  * 改由瀏覽器端抓取站台設定，避免靜態頁面把 build 階段的 fallback 內容固定下來。
  */
 export default function Footer() {
-	const [siteName, setSiteName] = useState('中原大學台北市校友會');
+	const [siteName, setSiteName] = useState('台北市中原大學校友會');
 	const [siteDescription, setSiteDescription] = useState(
 		'串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。'
 	);
@@ -43,7 +43,7 @@ export default function Footer() {
 			.then(([settings, menus, categoryList]) => {
 				if (cancelled) return;
 
-				const nextSiteName = settings.siteName?.trim() || '中原大學台北市校友會';
+				const nextSiteName = settings.siteName?.trim() || '台北市中原大學校友會';
 				setSiteName(nextSiteName);
 				setSiteDescription(
 					settings.metaDescription?.trim() ||
@@ -73,7 +73,7 @@ export default function Footer() {
 			.catch((error) => {
 				console.error('Footer load error:', error);
 				if (cancelled) return;
-				setCopyright((current) => current || `© ${new Date().getFullYear()} 中原大學台北市校友會. All rights reserved.`);
+				setCopyright((current) => current || `© ${new Date().getFullYear()} 台北市中原大學校友會. All rights reserved.`);
 			});
 
 		return () => {

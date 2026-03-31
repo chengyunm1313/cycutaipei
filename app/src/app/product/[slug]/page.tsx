@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: PageProps) {
 			image: images,
 			brand: {
 				'@type': 'Organization',
-				name: '中原大學台北市校友會',
+				name: '台北市中原大學校友會',
 			},
 		};
 

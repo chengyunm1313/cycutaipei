@@ -19,13 +19,13 @@ const notoSansTC = Noto_Sans_TC({
 
 const defaultMetadata: Metadata = {
 	title: {
-		default: '中原大學台北市校友會｜最新消息與活動資訊',
-		template: '%s | 中原大學台北市校友會',
+		default: '台北市中原大學校友會｜最新消息與活動資訊',
+		template: '%s | 台北市中原大學校友會',
 	},
 	description: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
 	keywords: ['中原大學', '台北市校友會', '校友活動', '最新消息', '校友服務'],
 	openGraph: {
-		title: '中原大學台北市校友會',
+		title: '台北市中原大學校友會',
 		description: '串聯中原大學台北市校友情誼，提供最新消息、活動資訊與校友會相關服務。',
 		type: 'website',
 		locale: 'zh_TW',
@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		const settings = await fetchSiteSettings({
 			next: { revalidate: 0 },
 		});
-		const siteName = settings.siteName?.trim() || '中原大學台北市校友會';
+		const siteName = settings.siteName?.trim() || '台北市中原大學校友會';
 		const title = settings.siteTitle?.trim() || `${siteName}｜最新消息與活動資訊`;
 		const description =
 			settings.metaDescription?.trim() ||
@@ -75,7 +75,7 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	let initialSiteName = '中原大學台北市校友會';
+	let initialSiteName = '台北市中原大學校友會';
 
 	try {
 		const settings = await fetchSiteSettings({

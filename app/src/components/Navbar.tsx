@@ -154,7 +154,7 @@ interface NavbarProps {
 	initialSiteName?: string;
 }
 
-export default function Navbar({ initialSiteName = '中原大學台北市校友會' }: NavbarProps) {
+export default function Navbar({ initialSiteName = '台北市中原大學校友會' }: NavbarProps) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [categoryList, setCategoryList] = useState<ApiCategory[]>([]);
