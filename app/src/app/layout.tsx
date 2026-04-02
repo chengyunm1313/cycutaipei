@@ -76,6 +76,8 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	let initialSiteName = '台北市中原大學校友會';
+	let initialLogoUrl: string | null = null;
+	let initialFooterLogoUrl: string | null = null;
 
 	try {
 		const settings = await fetchSiteSettings({
@@ -84,6 +86,8 @@ export default async function RootLayout({
 		if (settings.siteName?.trim()) {
 			initialSiteName = settings.siteName.trim();
 		}
+		initialLogoUrl = settings.logoUrl ?? null;
+		initialFooterLogoUrl = settings.footerLogoUrl ?? settings.logoUrl ?? null;
 	} catch (error) {
 		console.error('Layout site settings load error:', error);
 	}
@@ -91,9 +95,9 @@ export default async function RootLayout({
 	return (
 		<html lang='zh-TW' suppressHydrationWarning>
 			<body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
-				<Navbar initialSiteName={initialSiteName} />
+				<Navbar initialSiteName={initialSiteName} initialLogoUrl={initialLogoUrl} />
 				<main className='pt-16 min-h-screen'>{children}</main>
-				<Footer />
+				<Footer initialFooterLogoUrl={initialFooterLogoUrl} />
 			</body>
 		</html>
 	);

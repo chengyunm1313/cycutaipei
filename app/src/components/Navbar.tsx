@@ -152,14 +152,16 @@ function MenuLinkItem({ menu, className, children, onClick }: MenuLinkProps) {
  */
 interface NavbarProps {
 	initialSiteName?: string;
+	initialLogoUrl?: string | null;
 }
 
-export default function Navbar({ initialSiteName = '台北市中原大學校友會' }: NavbarProps) {
+export default function Navbar({ initialSiteName = '台北市中原大學校友會', initialLogoUrl = null }: NavbarProps) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [categoryList, setCategoryList] = useState<ApiCategory[]>([]);
 	const [menuList, setMenuList] = useState<ApiMenu[]>(fallbackMenus);
 	const [siteName, setSiteName] = useState(initialSiteName);
+	const [logoUrl, setLogoUrl] = useState<string | null>(initialLogoUrl);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -195,6 +197,9 @@ export default function Navbar({ initialSiteName = '台北市中原大學校友�
 			.then((settings) => {
 				if (settings.siteName?.trim()) {
 					setSiteName(settings.siteName.trim());
+				}
+				if (settings.logoUrl !== undefined) {
+					setLogoUrl(settings.logoUrl);
 				}
 			})
 			.catch(console.error);
@@ -239,22 +244,32 @@ export default function Navbar({ initialSiteName = '台北市中原大學校友�
 				<div className='flex items-center justify-between h-16'>
 					{/* Logo */}
 					<AppLink href='/' className='flex items-center gap-2 cursor-pointer group'>
-						<div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center group-hover:bg-primary-dark transition-colors duration-200'>
-							<svg
-								className='w-5 h-5 text-white'
-								fill='none'
-								viewBox='0 0 24 24'
-								strokeWidth={2}
-								stroke='currentColor'
-							>
-								<path
-									strokeLinecap='round'
-									strokeLinejoin='round'
-									d='M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
-								/>
-							</svg>
-						</div>
-						<span className='text-lg font-bold text-text'>{siteName}</span>
+						{logoUrl ? (
+							<img
+								src={logoUrl}
+								alt={siteName}
+								className='h-10 w-auto object-contain'
+							/>
+						) : (
+							<>
+								<div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center group-hover:bg-primary-dark transition-colors duration-200'>
+									<svg
+										className='w-5 h-5 text-white'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={2}
+										stroke='currentColor'
+									>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
+										/>
+									</svg>
+								</div>
+								<span className='text-lg font-bold text-text'>{siteName}</span>
+							</>
+						)}
 					</AppLink>
 
 					{/* 桌面版導覽 */}
