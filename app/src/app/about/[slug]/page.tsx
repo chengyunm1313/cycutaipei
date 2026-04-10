@@ -7,7 +7,7 @@ import type { PageBlock } from '@/data/types';
 
 export const runtime = 'edge';
 
-const CHARTER_FILE_URL = '/docs/cycu-alumni-charter-11th.pdf';
+const CHARTER_FILE_URL = '/docs/taipei-cycu-alumni-charter.pdf';
 const BOARD_MEMBERS = [
 	{ role: '理事長', name: '洪千惠' },
 	{ role: '副理事長', name: '張意良' },
@@ -53,9 +53,9 @@ function AboutOrganizationExtras({
 				<div className='flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between'>
 					<div>
 						<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>章程下載</p>
-						<h2 className='text-2xl font-bold text-text'>中華民國中原大學校友總會章程</h2>
+						<h2 className='text-2xl font-bold text-text'>台北市中原大學校友會組織章程</h2>
 						<p className='text-text-muted mt-2'>
-							提供第 11 屆章程 PDF，方便校友查閱組織宗旨、會員權利義務與會務規範。
+							提供台北市中原大學校友會組織章程 PDF（98.3.7 版），方便校友查閱組織宗旨、會員權利義務與會務規範。
 						</p>
 					</div>
 					<div className='flex flex-wrap gap-3'>
@@ -69,7 +69,7 @@ function AboutOrganizationExtras({
 						</a>
 						<a
 							href={CHARTER_FILE_URL}
-							download='中華民國中原大學校友總會章程(11屆).pdf'
+							download='台北市中原大學校友會組織章程(98.3.7).pdf'
 							className='inline-flex items-center justify-center px-5 py-3 rounded-xl border border-border text-text text-sm font-semibold hover:bg-surface transition-colors'
 						>
 							下載章程

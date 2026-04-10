@@ -13,6 +13,7 @@
 		"pages:build": "npx @cloudflare/next-on-pages",
 		"pages:preview": "npm run pages:build && npx wrangler pages dev .vercel/output/static",
 		"pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static",
+		"deploy": "npm run pages:deploy",
 		"smoke:rsc": "node scripts/smoke-rsc.mjs"
 	},
 	"dependencies": {
