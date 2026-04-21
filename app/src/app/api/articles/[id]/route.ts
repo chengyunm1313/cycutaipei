@@ -5,6 +5,7 @@ import { articles } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
 import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -67,12 +68,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 			seoDescription?: string;
 			postDate?: string | null;
 		};
+		const normalizedSlug =
+			data.slug === undefined ? undefined : slugifyAscii(data.slug || data.title || '', 'article');
 
 		const updated = await db
 			.update(articles)
 			.set({
 				title: data.title,
-				slug: data.slug,
+				slug: normalizedSlug,
 				excerpt: data.excerpt,
 				content: data.content,
 				coverImage: data.coverImage,

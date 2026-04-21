@@ -5,6 +5,7 @@ import { articles } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
 import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -65,8 +66,9 @@ export async function POST(request: NextRequest) {
 		const { env } = getRequestContext();
 		const db = getDb(env.DB);
 		const data = (await request.json()) as ArticleInput;
+		const normalizedSlug = slugifyAscii(data.slug || data.title || '', 'article');
 
-		if (!data.title || !data.slug) {
+		if (!data.title || !normalizedSlug) {
 			return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
@@ -74,7 +76,7 @@ export async function POST(request: NextRequest) {
 			.insert(articles)
 			.values({
 				title: data.title,
-				slug: data.slug,
+				slug: normalizedSlug,
 				excerpt: data.excerpt,
 				content: data.content,
 				coverImage: data.coverImage,

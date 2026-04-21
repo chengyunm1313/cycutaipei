@@ -5,6 +5,7 @@ import { products } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
 import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -67,12 +68,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 		const { env } = getRequestContext();
 		const db = getDb(env.DB);
 		const data = (await request.json()) as ProductUpdateInput;
+		const normalizedSlug =
+			data.slug === undefined ? undefined : slugifyAscii(data.slug || data.name || '', 'activity');
 
 		const updated = await db
 			.update(products)
 			.set({
 				name: data.name,
-				slug: data.slug,
+				slug: normalizedSlug,
 				description: data.description,
 				content: data.content,
 				price: data.price,

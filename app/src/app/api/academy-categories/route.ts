@@ -4,6 +4,7 @@ import { asc, desc } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { academyCategories } from '@/db/schema';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -58,8 +59,9 @@ export async function POST(request: NextRequest) {
 		const { env } = getRequestContext();
 		const db = getDb(env.DB);
 		const data = (await request.json()) as AcademyCategoryInput;
+		const normalizedSlug = slugifyAscii(data.slug || data.name || '', 'academy-category');
 
-		if (!data.name || !data.slug) {
+		if (!data.name || !normalizedSlug) {
 			return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
 			.insert(academyCategories)
 			.values({
 				name: data.name,
-				slug: data.slug,
+				slug: normalizedSlug,
 				description: data.description,
 				image: data.image,
 				sortOrder: data.sortOrder ?? 0,

@@ -5,6 +5,7 @@ import { products } from '@/db/schema';
 import { asc, desc } from 'drizzle-orm';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
 import { clampCoverImagePositionY } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -87,8 +88,9 @@ export async function POST(request: NextRequest) {
 		const { env } = getRequestContext();
 		const db = getDb(env.DB);
 		const data = (await request.json()) as ProductInput;
+		const normalizedSlug = slugifyAscii(data.slug || data.name || '', 'activity');
 
-		if (!data.name || !data.slug) {
+		if (!data.name || !normalizedSlug) {
 			return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
 			.insert(products)
 			.values({
 				name: data.name,
-				slug: data.slug,
+				slug: normalizedSlug,
 				description: data.description,
 				content: data.content,
 				price: data.price,

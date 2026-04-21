@@ -4,6 +4,7 @@ import { eq, ne } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { articleCategories, articles } from '@/db/schema';
 import { ensureArticleCategoriesTable } from '@/db/ensureArticleCategoriesTable';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -12,14 +13,6 @@ interface UpdateArticleCategoryPayload {
 	slug?: string;
 	sortOrder?: number;
 	isActive?: boolean;
-}
-
-function slugify(input: string): string {
-	return input
-		.toLowerCase()
-		.trim()
-		.replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
-		.replace(/^-+|-+$/g, '');
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -49,7 +42,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 		const current = found[0];
 		const nextName = payload.name?.trim() || current.name;
-		const nextSlug = (payload.slug?.trim() || slugify(nextName) || current.slug).trim();
+		const nextSlug = slugifyAscii(payload.slug?.trim() || nextName || current.slug, 'article-category').trim();
 
 		const duplicateName = await db
 			.select()

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -87,7 +88,7 @@ export async function POST(request: NextRequest) {
 		const db = getDatabaseOrThrow();
 		const data = (await request.json()) as PageCreatePayload;
 		const title = data.title?.trim();
-		const slug = data.slug?.trim();
+		const slug = slugifyAscii(data.slug?.trim() || title || '', 'page');
 
 		if (!title || !slug) {
 			return NextResponse.json(

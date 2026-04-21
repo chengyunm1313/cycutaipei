@@ -12,6 +12,7 @@ import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import dynamic from 'next/dynamic';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -54,18 +55,9 @@ export default function NewProductPage() {
 	// 自動產生 slug
 	const handleNameChange = (value: string) => {
 		setName(value);
-		if (!slug || slug === generateSlug(name)) {
-			setSlug(generateSlug(value));
+		if (!slug || slug === slugifyAscii(name, 'activity')) {
+			setSlug(slugifyAscii(value, 'activity'));
 		}
-	};
-
-	const generateSlug = (text: string) => {
-		return text
-			.toLowerCase()
-			.replace(/[^\w\u4e00-\u9fff\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/-+/g, '-')
-			.trim();
 	};
 
 	const handleSave = async (nextStatus: 'published' | 'draft') => {
@@ -99,7 +91,7 @@ export default function NewProductPage() {
 		try {
 			const product = await createProduct({
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'activity'),
 				description: description || null,
 				categoryId: categoryId === '' ? null : categoryId,
 				subcategoryId: subcategoryId === '' ? null : subcategoryId,
@@ -175,12 +167,12 @@ export default function NewProductPage() {
 							id='slug'
 							type='text'
 							value={slug}
-							onChange={(e) => setSlug(e.target.value)}
+							onChange={(e) => setSlug(slugifyAscii(e.target.value, 'activity'))}
 							placeholder='mcu-3200'
 							required
 							className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 						/>
-						<p className='text-xs text-text-light mt-1'>用於網址，僅限英文、數字與連字號</p>
+						<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 					</div>
 
 					<div>

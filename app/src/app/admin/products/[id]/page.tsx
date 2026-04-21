@@ -14,6 +14,7 @@ import EditorPublishToolbar from '@/components/admin/EditorPublishToolbar';
 import { normalizeOptionalHttpUrl } from '@/lib/optionalUrl';
 import { parseImageValue } from '@/lib/imageValue';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -112,7 +113,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 		Promise.all([fetchProduct(productId), fetchCategories()])
 			.then(([prod, cats]) => {
 				setName(prod.name);
-				setSlug(prod.slug);
+				setSlug(slugifyAscii(prod.slug, 'activity'));
 				setDescription(prod.description || '');
 				setContent(prod.content || '');
 				setInitialHTML(prod.content || '');
@@ -178,7 +179,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 		try {
 			await updateProduct(productId, {
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'activity'),
 				description,
 				content,
 				price: price === '' ? null : Number(price),
@@ -288,10 +289,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 									id='slug'
 									type='text'
 									value={slug}
-									onChange={(e) => setSlug(e.target.value)}
+									onChange={(e) => setSlug(slugifyAscii(e.target.value, 'activity'))}
 									required
 									className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 								/>
+								<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 							</div>
 
 							<div>

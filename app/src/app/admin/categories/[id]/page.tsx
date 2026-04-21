@@ -8,6 +8,7 @@ import AppLink from '@/components/AppLink';
 import { fetchCategory, updateCategory, deleteCategoryApi, fetchCategories } from '@/lib/api';
 import type { ApiCategory } from '@/data/types';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import { slugifyAscii } from '@/lib/slug';
 
 /**
  * 後台 - 編輯分類
@@ -51,7 +52,7 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
 		fetchCategory(categoryId)
 			.then((cat) => {
 				setName(cat.name);
-				setSlug(cat.slug);
+				setSlug(slugifyAscii(cat.slug, 'category'));
 				setDescription(cat.description || '');
 				setImage(cat.image || '');
 				setCoverImage(cat.coverImage || '');
@@ -97,7 +98,7 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
 
 			await updateCategory(categoryId, {
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'category'),
 				description: description || undefined,
 				image: image || undefined,
 				coverImage: coverImage || undefined,
@@ -197,12 +198,12 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
 								id='slug'
 								type='text'
 								value={slug}
-								onChange={(e) => setSlug(e.target.value)}
+								onChange={(e) => setSlug(slugifyAscii(e.target.value, 'category'))}
 								placeholder='mcu'
 								required
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 							/>
-							<p className='text-xs text-text-light mt-1'>用於網址，僅限英文、數字與連字號</p>
+							<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 						</div>
 					</div>
 

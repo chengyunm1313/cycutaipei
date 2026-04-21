@@ -9,6 +9,7 @@ import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import { fetchArticleCategories } from '@/lib/api';
 import type { ApiArticleCategory } from '@/data/types';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 // BlockNote 必須以 dynamic import 載入（不支援 SSR）
 const BlockNoteEditor = dynamic<{
@@ -124,11 +125,7 @@ export default function NewArticlePage() {
 
 	const handleTitleChange = (value: string) => {
 		setTitle(value);
-		const autoSlug = value
-			.toLowerCase()
-			.replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
-			.replace(/^-|-$/g, '');
-		setSlug(autoSlug);
+		setSlug(slugifyAscii(value, 'article'));
 		if (!seoTitle) setSeoTitle(`${value} | 台北市中原大學校友會`);
 	};
 
@@ -139,7 +136,7 @@ export default function NewArticlePage() {
 		}
 		const articleData = {
 			title,
-			slug,
+			slug: slugifyAscii(slug || title, 'article'),
 			excerpt,
 			category,
 			coverImage,
@@ -365,10 +362,11 @@ export default function NewArticlePage() {
 							<input
 								type='text'
 								value={slug}
-								onChange={(e) => setSlug(e.target.value)}
+								onChange={(e) => setSlug(slugifyAscii(e.target.value, 'article'))}
 								placeholder='article-slug'
 								className='w-full px-3 py-2 text-sm font-mono bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200'
 							/>
+							<p className='mt-2 text-xs text-text-light'>輸入中文也會自動轉成安全網址格式</p>
 						</div>
 
 						{/* 封面圖片 */}

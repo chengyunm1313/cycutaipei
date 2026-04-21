@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import AppLink from '@/components/AppLink';
 import ImageSelectInput from '@/components/ImageSelectInput';
 import { createAcademyCategory } from '@/lib/api';
+import { slugifyAscii } from '@/lib/slug';
 
 export default function NewAcademyCategoryPage() {
 	const router = useRouter();
@@ -19,18 +20,10 @@ export default function NewAcademyCategoryPage() {
 	const [error, setError] = useState('');
 	const [submitting, setSubmitting] = useState(false);
 
-	const generateSlug = (text: string) =>
-		text
-			.toLowerCase()
-			.replace(/[^\w\u4e00-\u9fff\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/-+/g, '-')
-			.trim();
-
 	const handleNameChange = (value: string) => {
 		setName(value);
-		if (!slug || slug === generateSlug(name)) {
-			setSlug(generateSlug(value));
+		if (!slug || slug === slugifyAscii(name, 'academy-category')) {
+			setSlug(slugifyAscii(value, 'academy-category'));
 		}
 	};
 
@@ -47,7 +40,7 @@ export default function NewAcademyCategoryPage() {
 		try {
 			await createAcademyCategory({
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'academy-category'),
 				description: description || undefined,
 				image: image || undefined,
 				sortOrder,
@@ -102,10 +95,11 @@ export default function NewAcademyCategoryPage() {
 								id='slug'
 								type='text'
 								value={slug}
-								onChange={(event) => setSlug(event.target.value)}
+								onChange={(event) => setSlug(slugifyAscii(event.target.value, 'academy-category'))}
 								required
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 							/>
+							<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 						</div>
 					</div>
 

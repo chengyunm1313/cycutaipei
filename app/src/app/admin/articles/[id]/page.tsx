@@ -12,6 +12,7 @@ import CoverImagePositionControl from '@/components/CoverImagePositionControl';
 import { useToast } from '@/components/ToastProvider';
 import type { ApiArticleCategory } from '@/data/types';
 import { DEFAULT_COVER_IMAGE_POSITION_Y } from '@/lib/coverImagePosition';
+import { slugifyAscii } from '@/lib/slug';
 
 // BlockNote 必須以 dynamic import 載入（不支援 SSR）
 const BlockNoteEditor = dynamic<{
@@ -70,7 +71,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 		fetchArticle(articleId)
 			.then((article) => {
 				setTitle(article.title);
-				setSlug(article.slug);
+				setSlug(slugifyAscii(article.slug, 'article'));
 				setExcerpt(article.excerpt || '');
 				setCategory(article.category || '');
 				setCoverImage(article.coverImage || '');
@@ -145,7 +146,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 		try {
 			await updateArticle(articleId, {
 				title,
-				slug,
+				slug: slugifyAscii(slug || title, 'article'),
 				excerpt,
 				category,
 				coverImage,
@@ -256,10 +257,11 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 						<input
 							type='text'
 							value={slug}
-							onChange={(e) => setSlug(e.target.value)}
+							onChange={(e) => setSlug(slugifyAscii(e.target.value, 'article'))}
 							className='flex-1 px-2 py-1 bg-surface rounded border border-border text-text-muted font-mono text-sm outline-none focus:border-primary'
 						/>
 					</div>
+					<p className='-mt-2 text-xs text-text-light'>輸入中文也會自動轉成安全網址格式</p>
 
 					{/* 編輯器 */}
 					<div className='bg-card rounded-xl border border-border min-h-[500px]'>

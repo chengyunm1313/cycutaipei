@@ -4,6 +4,7 @@ import { asc, eq } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { articleCategories } from '@/db/schema';
 import { ensureArticleCategoriesTable } from '@/db/ensureArticleCategoriesTable';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -12,14 +13,6 @@ interface ArticleCategoryPayload {
 	slug?: string;
 	sortOrder?: number;
 	isActive?: boolean;
-}
-
-function slugify(input: string): string {
-	return input
-		.toLowerCase()
-		.trim()
-		.replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
-		.replace(/^-+|-+$/g, '');
 }
 
 async function ensureDefaultArticleCategories(db: ReturnType<typeof getDb>) {
@@ -96,7 +89,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		const name = data.name.trim();
-		const slug = (data.slug || slugify(name)).trim();
+		const slug = slugifyAscii(data.slug || name, 'article-category').trim();
 		if (!slug) {
 			return NextResponse.json({ error: 'slug is required' }, { status: 400 });
 		}

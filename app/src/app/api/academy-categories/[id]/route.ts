@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { academyCategories } from '@/db/schema';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -60,11 +61,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 			sortOrder?: number;
 			isActive?: boolean;
 		};
+		const normalizedSlug =
+			data.slug === undefined
+				? undefined
+				: slugifyAscii(data.slug || data.name || '', 'academy-category');
 
 		const updated = await db
 			.update(academyCategories)
 			.set({
 				...data,
+				slug: normalizedSlug,
 			})
 			.where(eq(academyCategories.id, categoryId))
 			.returning();

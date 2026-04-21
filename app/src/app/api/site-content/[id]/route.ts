@@ -3,6 +3,7 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 import { ensureSiteContentsTable } from '@/db/ensureSiteContentsTable';
 import type { ApiSiteContent } from '@/data/types';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -130,6 +131,12 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 		}
 
 		const data = (await request.json()) as SiteContentPayload;
+		const normalizedSlug =
+			data.slug === undefined
+				? found.slug
+				: data.slug === null
+					? null
+					: slugifyAscii(data.slug, found.type || 'page');
 
 		await env.DB
 			.prepare(
@@ -150,7 +157,7 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 			.bind(
 				data.parentId !== undefined ? data.parentId : found.parent_id,
 				data.title !== undefined ? data.title : found.title,
-				data.slug !== undefined ? data.slug : found.slug,
+				normalizedSlug,
 				data.summary !== undefined ? data.summary : found.summary,
 				data.content !== undefined ? data.content : found.content,
 				data.imageUrl !== undefined ? data.imageUrl : found.image_url,

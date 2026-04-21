@@ -3,6 +3,7 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 import { ensureSiteContentsTable } from '@/db/ensureSiteContentsTable';
 import type { ApiSiteContent } from '@/data/types';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -151,6 +152,10 @@ export async function POST(request: NextRequest) {
 
 		const id = data.id || createContentId(data.type);
 		const isActive = data.isActive === undefined ? 1 : Number(Boolean(data.isActive));
+		const normalizedSlug =
+			data.slug === undefined || data.slug === null
+				? data.slug
+				: slugifyAscii(data.slug, data.type || 'page');
 
 		await env.DB
 			.prepare(
@@ -163,7 +168,7 @@ export async function POST(request: NextRequest) {
 				data.type,
 				data.parentId || null,
 				data.title || null,
-				data.slug || null,
+				normalizedSlug || null,
 				data.summary || null,
 				data.content || null,
 				data.imageUrl || null,

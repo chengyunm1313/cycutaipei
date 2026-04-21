@@ -11,6 +11,7 @@ import {
 	fetchAcademyCategory,
 	updateAcademyCategory,
 } from '@/lib/api';
+import { slugifyAscii } from '@/lib/slug';
 
 export default function EditAcademyCategoryPage({
 	params,
@@ -41,7 +42,7 @@ export default function EditAcademyCategoryPage({
 		fetchAcademyCategory(categoryId)
 			.then((category) => {
 				setName(category.name);
-				setSlug(category.slug);
+				setSlug(slugifyAscii(category.slug, 'academy-category'));
 				setDescription(category.description || '');
 				setImage(category.image || '');
 				setSortOrder(category.sortOrder ?? 0);
@@ -67,7 +68,7 @@ export default function EditAcademyCategoryPage({
 		try {
 			await updateAcademyCategory(categoryId, {
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'academy-category'),
 				description: description || undefined,
 				image: image || undefined,
 				sortOrder,
@@ -149,10 +150,11 @@ export default function EditAcademyCategoryPage({
 								id='slug'
 								type='text'
 								value={slug}
-								onChange={(event) => setSlug(event.target.value)}
+								onChange={(event) => setSlug(slugifyAscii(event.target.value, 'academy-category'))}
 								required
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 							/>
+							<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 						</div>
 					</div>
 

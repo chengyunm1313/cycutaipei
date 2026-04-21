@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { triggerSiteRevalidation } from '@/lib/revalidateSiteCache';
+import { slugifyAscii } from '@/lib/slug';
 
 export const runtime = 'edge';
 
@@ -83,7 +84,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 
 		const current = existing[0];
 		const title = data.title !== undefined ? data.title : current.title;
-		const slug = data.slug !== undefined ? data.slug : current.slug;
+		const slug =
+			data.slug !== undefined ? slugifyAscii(data.slug || title || '', 'page') : current.slug;
 		const contentBlocks =
 			data.content_blocks !== undefined ? data.content_blocks : current.content_blocks;
 		const inMenu = data.in_menu !== undefined ? (data.in_menu ? 1 : 0) : current.in_menu;

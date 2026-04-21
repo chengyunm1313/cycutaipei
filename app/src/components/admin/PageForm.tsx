@@ -6,6 +6,7 @@ import { createPage, updatePage } from '@/lib/api';
 import type { ApiPage, PageBlock, BlockType } from '@/data/types';
 import dynamic from 'next/dynamic';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import { slugifyAscii } from '@/lib/slug';
 
 const BlockNoteEditor = dynamic(() => import('@/components/BlockNoteEditorWrapper'), {
 	ssr: false,
@@ -20,7 +21,7 @@ export default function PageForm({ initialData }: PageFormProps) {
 	const isEditing = !!initialData;
 
 	const [title, setTitle] = useState(initialData?.title || '');
-	const [slug, setSlug] = useState(initialData?.slug || '');
+	const [slug, setSlug] = useState(initialData?.slug ? slugifyAscii(initialData.slug, 'page') : '');
 	const [seoTitle, setSeoTitle] = useState(initialData?.seoTitle || '');
 	const [seoDescription, setSeoDescription] = useState(initialData?.seoDescription || '');
 	const [blocks, setBlocks] = useState<PageBlock[]>(() => {
@@ -128,7 +129,7 @@ export default function PageForm({ initialData }: PageFormProps) {
 			});
 			const payload: Partial<ApiPage> = {
 				title,
-				slug,
+				slug: slugifyAscii(slug, 'page'),
 				status: 'published', // 預設強制為 published
 				seoTitle,
 				seoDescription,
@@ -195,7 +196,7 @@ export default function PageForm({ initialData }: PageFormProps) {
 							<input
 								type='text'
 								value={slug}
-								onChange={(e) => setSlug(e.target.value)}
+							onChange={(e) => setSlug(slugifyAscii(e.target.value, 'page'))}
 								className='w-full px-4 py-2 bg-surface rounded-lg border border-border focus:border-primary outline-none transition-colors font-mono text-sm'
 								required
 								placeholder='例如：about-us'

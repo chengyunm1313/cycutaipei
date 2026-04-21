@@ -8,6 +8,7 @@ import AppLink from '@/components/AppLink';
 import { createCategory, fetchCategories } from '@/lib/api';
 import type { ApiCategory } from '@/data/types';
 import ImageSelectInput from '@/components/ImageSelectInput';
+import { slugifyAscii } from '@/lib/slug';
 
 /**
  * 後台 - 新增分類
@@ -42,18 +43,9 @@ export default function NewCategoryPage() {
 	// 自動產生 slug
 	const handleNameChange = (value: string) => {
 		setName(value);
-		if (!slug || slug === generateSlug(name)) {
-			setSlug(generateSlug(value));
+		if (!slug || slug === slugifyAscii(name, 'category')) {
+			setSlug(slugifyAscii(value, 'category'));
 		}
-	};
-
-	const generateSlug = (text: string) => {
-		return text
-			.toLowerCase()
-			.replace(/[^\w\u4e00-\u9fff\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/-+/g, '-')
-			.trim();
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -69,7 +61,7 @@ export default function NewCategoryPage() {
 		try {
 			await createCategory({
 				name,
-				slug,
+				slug: slugifyAscii(slug, 'category'),
 				description: description || undefined,
 				image: image || undefined,
 				coverImage: coverImage || undefined,
@@ -141,12 +133,12 @@ export default function NewCategoryPage() {
 								id='slug'
 								type='text'
 								value={slug}
-								onChange={(e) => setSlug(e.target.value)}
+								onChange={(e) => setSlug(slugifyAscii(e.target.value, 'category'))}
 								placeholder='mcu'
 								required
 								className='w-full px-4 py-2.5 text-sm bg-surface rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200 font-mono'
 							/>
-							<p className='text-xs text-text-light mt-1'>用於網址，僅限英文、數字與連字號</p>
+							<p className='text-xs text-text-light mt-1'>輸入中文也會自動轉成安全網址格式</p>
 						</div>
 					</div>
 
