@@ -13,7 +13,7 @@
 		"db:seed": "curl -X POST http://localhost:3000/api/seed",
 		"pages:build": "npx @cloudflare/next-on-pages",
 		"pages:preview": "npm run pages:build && npx wrangler pages dev .vercel/output/static",
-		"pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static",
+		"pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --commit-message deploy",
 		"deploy": "npm run pages:deploy",
 		"smoke:rsc": "node scripts/smoke-rsc.mjs"
 	},
