@@ -8,6 +8,7 @@ import {
 	updateArticleCategory,
 } from '@/lib/api';
 import type { ApiArticleCategory } from '@/data/types';
+import { slugifyAscii } from '@/lib/slug';
 
 type EditableCategory = {
 	id: number | string;
@@ -16,14 +17,6 @@ type EditableCategory = {
 	sortOrder: number;
 	isActive: boolean;
 };
-
-function slugify(input: string): string {
-	return input
-		.toLowerCase()
-		.trim()
-		.replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
-		.replace(/^-+|-+$/g, '');
-}
 
 function normalizeSortOrder(list: EditableCategory[]): EditableCategory[] {
 	const total = list.length;
@@ -121,7 +114,7 @@ export default function AdminArticleCategoriesPage() {
 			for (const item of items) {
 				const payload = {
 					name: item.name.trim(),
-					slug: item.slug?.trim() || slugify(item.name),
+					slug: item.slug?.trim() || slugifyAscii(item.name, 'article-category'),
 					sortOrder: item.sortOrder,
 					isActive: item.isActive,
 				};
@@ -222,7 +215,7 @@ export default function AdminArticleCategoriesPage() {
 																? {
 																	...row,
 																	name,
-																	slug: row.slug || slugify(name),
+																	slug: row.slug || slugifyAscii(name, 'article-category'),
 																}
 																: row
 														)
@@ -237,7 +230,7 @@ export default function AdminArticleCategoriesPage() {
 												type='text'
 												value={item.slug}
 												onChange={(e) => {
-													const slug = e.target.value;
+													const slug = slugifyAscii(e.target.value, 'article-category');
 													setItems((prev) =>
 														prev.map((row) => (row.id === item.id ? { ...row, slug } : row))
 													);

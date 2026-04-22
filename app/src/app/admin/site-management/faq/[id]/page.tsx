@@ -13,16 +13,7 @@ import {
 	updateSiteContentOrderApi,
 } from '@/lib/api';
 import type { ApiSiteContent } from '@/data/types';
-
-function slugify(value: string): string {
-	return value
-		.trim()
-		.toLowerCase()
-		.replace(/[^a-z0-9\u4e00-\u9fa5\s-]/g, '')
-		.replace(/\s+/g, '-')
-		.replace(/-+/g, '-')
-		.replace(/^-|-$/g, '');
-}
+import { slugifyAscii } from '@/lib/slug';
 
 function notifySiteContentUpdated() {
 	if (typeof window !== 'undefined') {
@@ -87,7 +78,7 @@ export default function AdminFaqCustomEditPage() {
 			setSavingPage(true);
 			await updateSiteContent(id, {
 				title: title.trim(),
-				slug: slug.trim() || slugify(title),
+				slug: slug.trim() || slugifyAscii(title, 'faq-page'),
 				summary: summary.trim() || null,
 			});
 			setNotice('頁面資訊已儲存。');
@@ -220,7 +211,7 @@ export default function AdminFaqCustomEditPage() {
 							value={title}
 							onChange={(event) => {
 								setTitle(event.target.value);
-								if (!slug) setSlug(slugify(event.target.value));
+								if (!slug) setSlug(slugifyAscii(event.target.value, 'faq-page'));
 							}}
 							className='w-full px-4 py-2 text-base border border-border rounded-xl bg-surface'
 						/>
@@ -230,7 +221,7 @@ export default function AdminFaqCustomEditPage() {
 						<input
 							type='text'
 							value={slug}
-							onChange={(event) => setSlug(slugify(event.target.value))}
+							onChange={(event) => setSlug(slugifyAscii(event.target.value, 'faq-page'))}
 							className='w-full px-4 py-2 text-base border border-border rounded-xl bg-surface font-mono'
 						/>
 					</div>

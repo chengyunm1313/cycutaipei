@@ -10,16 +10,7 @@ import {
 	updateSiteContentOrderApi,
 } from '@/lib/api';
 import type { ApiSiteContent } from '@/data/types';
-
-function slugify(value: string): string {
-	return value
-		.trim()
-		.toLowerCase()
-		.replace(/[^a-z0-9\u4e00-\u9fa5\s-]/g, '')
-		.replace(/\s+/g, '-')
-		.replace(/-+/g, '-')
-		.replace(/^-|-$/g, '');
-}
+import { slugifyAscii } from '@/lib/slug';
 
 function normalizeValue(value: string): string {
 	return value.trim().toLowerCase();
@@ -246,7 +237,7 @@ export default function AdminFaqManagePage() {
 											const title = event.target.value;
 											handlePatch(item.id, {
 												title,
-												slug: item.slug || slugify(title),
+												slug: item.slug || slugifyAscii(title, 'faq-page'),
 											});
 										}}
 										className='w-full px-3 py-2 rounded-lg border border-border bg-surface'
@@ -256,7 +247,9 @@ export default function AdminFaqManagePage() {
 									<input
 										type='text'
 										value={item.slug || ''}
-										onChange={(event) => handlePatch(item.id, { slug: slugify(event.target.value) })}
+										onChange={(event) =>
+											handlePatch(item.id, { slug: slugifyAscii(event.target.value, 'faq-page') })
+										}
 										className='w-full px-3 py-2 rounded-lg border border-border bg-surface font-mono text-sm'
 									/>
 								</td>

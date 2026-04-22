@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# cycutaipei app
 
-## Getting Started
+台北市中原大學校友會前後台站點，使用 Next.js 建置，並搭配 Cloudflare Pages / Edge runtime。
 
-First, run the development server:
+## 常用指令
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
+npm run test:slug
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Slug 規則
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+本專案的 slug 生成集中在 [src/lib/slug.ts](./src/lib/slug.ts)。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 前台路由一律收斂為 ASCII slug，避免中文 slug 在 Cloudflare Pages detail route 上不穩。
+- 站點高頻專有詞先走專案字典，例如 `台北市中原大學校友會 -> taipei-cycu-alumni-association`。
+- 其餘中文再走 `pinyin-pro` 轉拼音。
+- 若內容仍無法產出可用 slug，最後回退到 `fallback-hash`。
 
-## Learn More
+### 什麼情況要加進專案字典
 
-To learn more about Next.js, take a look at the following resources:
+- 站名、校名、校友會名稱
+- 反覆出現在 URL 的固定入口，例如 `校友學院`、`最新消息`、`常見問題`
+- 會務或活動中的固定專有詞，且已確認用拼音會明顯不自然
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 什麼情況不要加進專案字典
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 一般中文名詞
+- 偶發文章標題用語
+- 只是為了避免拼音而想全部硬翻成英文的詞
 
-## Deploy on Vercel
+這類內容優先保持拼音 fallback，避免字典失控膨脹。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Slug 測試
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`npm run test:slug` 會驗證目前的代表案例，包含：
+
+- ASCII slug 正規化
+- 專案字典命中結果
+- 會務 / 活動標題的虛詞清理
+- 未命中字典時的拼音 fallback
+- 空值與 fallback hash
+
+若你調整了 `src/lib/slug.ts` 的字典或清理規則，請至少重新跑一次：
+
+```bash
+npm run test:slug
+npm run build
+```
