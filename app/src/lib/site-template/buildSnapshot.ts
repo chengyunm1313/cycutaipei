@@ -123,7 +123,7 @@ function buildContactUsPage(baseId: number, now: string) {
 				type: 'hero',
 				data: {
 					title: '聯絡我們',
-					subtitle: '我們很樂意傾聽您的聲音！不論是產品諮詢或是業務合作，請隨時與我們聯繫。',
+					subtitle: '歡迎與台北市中原大學校友會聯繫，我們將由專人協助您處理入會、活動與校友交流相關事宜。',
 					imageUrl:
 						'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
 					ctaText: '',
@@ -135,31 +135,41 @@ function buildContactUsPage(baseId: number, now: string) {
 				type: 'text',
 				data: {
 					content: `
-						<div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+						<div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
 							<div>
-								<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #111827;">🏢 總公司資訊</h3>
+								<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #111827;">社團資訊</h3>
 								<ul style="list-style-type: none; padding: 0; margin: 0; color: #4b5563;">
-									<li style="margin-bottom: 0.5rem;"><strong>📍 地址：</strong> 台北市信義區信義路五段 7 號</li>
-									<li style="margin-bottom: 0.5rem;"><strong>🕒 營業時間：</strong> 週一至週五 09:00 - 18:00 (國定假日休息)</li>
+									<li style="margin-bottom: 0.75rem;"><strong>公司名稱：</strong> 台北市中原大學校友會</li>
+									<li style="margin-bottom: 0.75rem;"><strong>電話：</strong> <a href="tel:+886922535942" style="color: #1d4ed8; text-decoration: none;">+886 922 535 942</a></li>
+									<li style="margin-bottom: 0.75rem;"><strong>Email：</strong> <a href="mailto:hoter1106@gmail.com" style="color: #1d4ed8; text-decoration: none;">hoter1106@gmail.com</a></li>
 								</ul>
 							</div>
 							
 							<div>
-								<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #111827;">🤝 業務與合作洽詢</h3>
-								<p style="color: #4b5563; margin-bottom: 0.5rem;">針對經銷代理、大型採購或異業結盟，歡迎與我們的業務團隊聯繫：</p>
+								<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #111827;">聯絡人</h3>
 								<ul style="list-style-type: none; padding: 0; margin: 0; color: #4b5563;">
-									<li style="margin-bottom: 0.5rem;"><strong>📞 業務專線：</strong> (02) 1234-5678 分機 101</li>
-									<li style="margin-bottom: 0.5rem;"><strong>✉️ 業務信箱：</strong> sales@example.com</li>
+									<li style="margin-bottom: 0.75rem;"><strong>姓名：</strong> 張意良 Steven</li>
+									<li style="margin-bottom: 0.75rem;"><strong>職稱：</strong> 理事長</li>
 								</ul>
 							</div>
 
-							<div>
-								<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #111827;">🛠️ 技術支援與客戶服務</h3>
-								<p style="color: #4b5563; margin-bottom: 0.5rem;">如您在使用產品時遇到任何問題，或需要售後服務：</p>
-								<ul style="list-style-type: none; padding: 0; margin: 0; color: #4b5563;">
-									<li style="margin-bottom: 0.5rem;"><strong>📞 客服專線：</strong> 0800-000-000</li>
-									<li style="margin-bottom: 0.5rem;"><strong>✉️ 客服信箱：</strong> service@example.com</li>
-								</ul>
+							<div style="padding: 2rem; border-radius: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #eef6ff 100%); border: 1px solid #dbeafe; text-align: center;">
+								<h3 style="margin-bottom: 1rem; color: #111827;">線上諮詢</h3>
+								<a
+									href="https://www.facebook.com/TaiBeiShiSiLiZhongYuanDaXueXiaoYouHui?locale=zh_TW"
+									target="_blank"
+									rel="noopener noreferrer"
+									style="display: inline-block; text-decoration: none;"
+								>
+									<img
+										src="/facebook-fanpage-qr.png"
+										alt="台北市中原大學校友會 Facebook 粉專 QR code"
+										style="width: 220px; max-width: 100%; height: auto; border-radius: 1rem; background: #ffffff; padding: 0.75rem; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);"
+									/>
+								</a>
+								<p style="margin: 1rem auto 0; max-width: 28rem; color: #334155; line-height: 1.8;">
+									歡迎掃描加入 FB 粉專，我們將由專人跟您聯繫。
+								</p>
 							</div>
 						</div>
 					`,

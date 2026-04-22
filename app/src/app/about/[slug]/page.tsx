@@ -85,7 +85,7 @@ function AboutOrganizationExtras({
 			<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
 				<div className='max-w-3xl'>
 					<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>理監事名單</p>
-					<h2 className='text-2xl font-bold text-text'>第25屆理監事與會務人員</h2>
+					<h2 className='text-2xl font-bold text-text'>第24屆理監事與會務人員</h2>
 					<p className='text-text-muted mt-2'>
 						方便校友快速查閱本屆主要幹部與理監事編制。
 					</p>
