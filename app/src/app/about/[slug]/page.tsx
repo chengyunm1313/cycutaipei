@@ -9,23 +9,27 @@ export const runtime = 'edge';
 
 const CHARTER_FILE_URL = '/docs/taipei-cycu-alumni-charter.pdf';
 const BOARD_MEMBERS = [
-	{ role: '理事長', name: '洪千惠' },
-	{ role: '副理事長', name: '張意良' },
+	{ role: '理事長', name: '張意良' },
+	{ role: '副理事長', name: '林霏虹' },
+	{ role: '常務理事', name: '洪千惠' },
 	{ role: '常務理事', name: '陳勇任' },
 	{ role: '常務理事', name: '林獻堂' },
-	{ role: '理事', name: '呂世傑' },
-	{ role: '理事', name: '郭里雲' },
-	{ role: '理事', name: '王榮助' },
-	{ role: '理事', name: '彭建生' },
-	{ role: '理事', name: '陳慧敏' },
-	{ role: '理事', name: '張宏瑋' },
-	{ role: '理事', name: '王永生' },
-	{ role: '理事', name: '張豐國' },
 	{ role: '理事', name: '徐享' },
-	{ role: '監事', name: '林正忠' },
+	{ role: '理事', name: '林俊宜' },
+	{ role: '理事', name: '成寧' },
+	{ role: '理事', name: '王聲典' },
+	{ role: '理事', name: '呂新傑' },
+	{ role: '理事', name: '黃柏隆' },
+	{ role: '理事', name: '張宏瑋' },
+	{ role: '理事', name: '王榮助' },
+	{ role: '理事', name: '王永生' },
+	{ role: '理事', name: '呂世傑' },
+	{ role: '常務監事', name: '彭為純' },
 	{ role: '監事', name: '孟祥治' },
 	{ role: '監事', name: '郭鵬霄' },
-	{ role: '總幹事', name: '林霏虹' },
+	{ role: '監事', name: '劉偉良' },
+	{ role: '監事', name: '張豐國' },
+	{ role: '總幹事', name: '陳宏賓' },
 ];
 
 interface AboutExtras {
@@ -81,9 +85,9 @@ function AboutOrganizationExtras({
 			<section className='rounded-3xl border border-border bg-white px-6 py-7 sm:px-8'>
 				<div className='max-w-3xl'>
 					<p className='text-xs font-semibold tracking-[0.18em] uppercase text-primary mb-2'>理監事名單</p>
-					<h2 className='text-2xl font-bold text-text'>第24屆理監事與會務人員</h2>
+					<h2 className='text-2xl font-bold text-text'>第25屆理監事與會務人員</h2>
 					<p className='text-text-muted mt-2'>
-						名單依 2024 年 12 月 2 日會員資料整理，方便校友快速查閱本屆主要幹部與理監事編制。
+						方便校友快速查閱本屆主要幹部與理監事編制。
 					</p>
 				</div>
 
@@ -168,7 +172,7 @@ export default async function AboutDetailPage({ params }: PageProps) {
 	const shouldShowCharter = page.slug === 'organization-profile';
 	const chairMembers = BOARD_MEMBERS.filter((member) => ['理事長', '副理事長', '常務理事', '總幹事'].includes(member.role));
 	const directors = BOARD_MEMBERS.filter((member) => member.role === '理事');
-	const supervisors = BOARD_MEMBERS.filter((member) => member.role === '監事');
+	const supervisors = BOARD_MEMBERS.filter((member) => ['監事', '常務監事'].includes(member.role));
 
 	return (
 		<main className='min-h-screen bg-[#f3f3f3]'>
